@@ -30,11 +30,12 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
 COPY --from=builder /app/.env.production ./.env
-
-EXPOSE $APP_PORT
+RUN chmod +x ./entrypoint.sh
 
 HEALTHCHECK --interval=15s --timeout=10s --start-period=15s --retries=8 \
     CMD wget -qO- http://localhost:$APP_PORT || exit 1
+
+EXPOSE $APP_PORT
 
 ENTRYPOINT ["./entrypoint.sh"]
 # CMD ["node_modules/.bin/next", "start", "--port", "3000"]

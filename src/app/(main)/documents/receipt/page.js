@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import FormReceipt from "@/views/receipt";
+import FormReceipt from "@/views/documents/receipt";
 import LoadingReceiptPage from "./loading";
 
 const Receipt = () => {

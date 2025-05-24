@@ -92,7 +92,7 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
             <img
               src={cellValue}
               alt={item.title || "product image"}
-              className="w-16 h-16 object-cover rounded"
+              className="w-10 h-10 object-cover rounded"
             />
           );
         case "chip":
@@ -147,12 +147,11 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
     },
     [columns]
   );
-
   const topContent = useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ">
         <div className="flex justify-between gap-3 items-center">
-          <h1 className="text-2xl font-bold p-2">
+          <h1 className="text-xl font-bold p-2">
             {" "}
             {titleTable}{" "}
             {selectedKeys.size > 0 || selectedKeys === "all" ? (
@@ -167,7 +166,7 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
               </span>
             )}
           </h1>
-          <Button color="primary" endContent={<FaPlus />}>
+          <Button color="primary" size="sm" endContent={<FaPlus />}>
             Add New
           </Button>
         </div>
@@ -177,32 +176,7 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
-        <label className="flex items-center text-default-400 text-small">
-          Rows per page:
-          {/* <Select
-              className="max-w-xs"
-              size="sm"
-              selectedKeys={new Set([rowsPerPage.toString()])}
-              variant="bordered"
-              onSelectionChange={onRowsPerPageChange}
-            >
-              <SelectItem key="5">5</SelectItem>
-              <SelectItem key="10">10</SelectItem>
-              <SelectItem key="15">15</SelectItem>
-            </Select> */}
-          <select
-            className="bg-transparent outline-none text-default-400 text-small"
-            defaultValue={rowsPerPage}
-            // value={rowsPerPage}
-            onChange={onRowsPerPageChange}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-          </select>
-        </label>
-
+      <div className="flex justify-between items-center">
         {pages > 0 ? (
           <>
             <Pagination
@@ -214,9 +188,38 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
               total={pages}
               onChange={setPage}
             />
+          </>
+        ) : null}
+
+        {pages > 0 ? (
+          <>
             <div className="hidden sm:flex w-[30%] justify-end gap-2">
+              <label className="flex items-center text-default-400 text-small">
+                Rows per page:
+                {/* <Select
+              className="max-w-xs"
+              size="sm"
+              selectedKeys={new Set([rowsPerPage.toString()])}
+              variant="bordered"
+              onSelectionChange={onRowsPerPageChange}
+            >
+              <SelectItem key="5">5</SelectItem>
+              <SelectItem key="10">10</SelectItem>
+              <SelectItem key="15">15</SelectItem>
+            </Select> */}
+                <select
+                  className="bg-transparent outline-none text-default-400 text-small"
+                  defaultValue={rowsPerPage}
+                  // value={rowsPerPage}
+                  onChange={onRowsPerPageChange}
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                </select>
+              </label>
               <Button
-                isDisabled={pages === 1}
+                isDisabled={page === 1}
                 size="sm"
                 variant="flat"
                 onPress={onPreviousPage}
@@ -224,7 +227,7 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
                 Previous
               </Button>
               <Button
-                isDisabled={pages === 1}
+                isDisabled={page === pages}
                 size="sm"
                 variant="flat"
                 onPress={onNextPage}
@@ -240,57 +243,58 @@ const TableQuery = ({ titleTable, sorting, isLoading, columns, height }) => {
 
   return (
     <>
-      <Table
-        isHeaderSticky
-        aria-label={titleTable}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
-        onSelectionChange={setSelectedKeys}
-        color="primary"
-        sortDescriptor={sorting.sortDescriptor}
-        onSortChange={sorting.sort}
-        onRowAction={(key) => {
-          const selectedItem = itemsRows.find((item) => item.id === key);
-          console.log(selectedItem);
-          alert(
-            `Opening item ${key}... ${selectedItem?.firstName || "Unknown"}`
-          );
-        }}
-        classNames={{
-          table: "min-w-full",
-          base: `overflow-auto max-h-[${height || "calc(100vh-200px)"}]`,
-        }}
-        bottomContent={bottomContent}
-        bottomContentPlacement="outside"
-        topContent={topContent}
-        topContentPlacement="outside"
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.key}
-              style={column.width ? { width: column.width } : {}}
-              allowsSorting
-            >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={itemsRows}
-          isLoading={isLoading}
-          loadingContent={<Spinner label="Loading..." />}
-          emptyContent={"No Data found"}
-        >
-          {(item) => (
-            <TableRow key={item.name}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+      <div className="flex flex-col h-full min-h-0">
+        <div className="flex-shrink-0">{topContent}</div>
+        <div className="flex-grow min-h-0 overflow-hidden pt-1 pb-2">
+          <Table
+            isHeaderSticky
+            aria-label={titleTable}
+            selectedKeys={selectedKeys}
+            selectionMode="multiple"
+            onSelectionChange={setSelectedKeys}
+            color="primary"
+            sortDescriptor={sorting.sortDescriptor}
+            onSortChange={sorting.sort}
+            onRowAction={(key) => {
+              const selectedItem = itemsRows.find((item) => item.id === key);
+              console.log(selectedItem);
+              alert(
+                `Opening item ${key}... ${selectedItem?.firstName || "Unknown"}`
+              );
+            }}
+            className="h-full"
+            classNames={{ wrapper: "h-full " }}
+          >
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn
+                  key={column.key}
+                  minWidth={column.width || "20px"}
+                  // style={column.width ? { width: column.width } : {}}
+                  // allowsSorting
+                >
+                  {column.label}
+                </TableColumn>
               )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>{" "}
+            </TableHeader>
+            <TableBody
+              items={itemsRows}
+              isLoading={isLoading}
+              loadingContent={<Spinner label="Loading..." />}
+              emptyContent={"No Data found"}
+            >
+              {(item) => (
+                <TableRow key={item.name}>
+                  {(columnKey) => (
+                    <TableCell>{renderCell(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex-shrink-0">{bottomContent}</div>
+      </div>
     </>
   );
 };

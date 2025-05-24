@@ -243,7 +243,8 @@ const MenuBar = ({
   } = useDisclosure();
 
   return (
-    <Card className="w-full p-2 rounded-xl shadow-sm">
+    <>
+      {/* // <Card className="w-full p-2 rounded-xl shadow-sm"> */}
       <div className=" flex flex-row items-center justify-center gap-2">
         <Modal isOpen={isConfirmModal} onOpenChange={closeConfirmModal}>
           <ModalContent>
@@ -549,7 +550,8 @@ const MenuBar = ({
         arrangement={arrangement}
         valuePageLayout={valuePageLayout}
       />
-    </Card>
+      {/* </Card> */}
+    </>
   );
 };
 

@@ -51,12 +51,13 @@ const MainLayout = ({ children }) => {
           </Drawer>
         )}
 
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 min-h-0">
           <div className="w-full  max-w-[100vw]">
             <NavbarTop isMobile={isMobile} onOpenSidebar={handleOpenSidebar} />
           </div>
 
-          <main className="flex-1 overflow-y-auto overflow-x-hidden p-4  w-full max-w-[100vw]">
+          {/* <main className="flex-1 overflow-y-auto overflow-x-hidden p-4  w-full max-w-[100vw]"> */}
+          <main className="flex-1 overflow-hidden pt-1 pb-2 p-4 w-full max-w-[100vw]">
             {children}
           </main>
         </div>

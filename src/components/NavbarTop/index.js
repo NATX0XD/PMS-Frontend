@@ -75,7 +75,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar }) => {
   };
 
   return (
-    <div className="flex justify-between items-center p-4 space-x-2  ">
+    <div className="flex justify-between items-center p-3 pb-0 space-x-2 ">
       <div className="flex items-center space-x-2">
         {isMobile && (
           <Button

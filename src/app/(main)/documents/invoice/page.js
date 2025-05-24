@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import FormInvoice from "@/views/invoice";
+import FormInvoice from "@/views/documents/invoice";
 import LoadingInvoicePage from "./loading";
 
 const Invoice = () => {

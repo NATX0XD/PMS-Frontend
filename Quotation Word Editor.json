@@ -21,9 +21,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    200
-                  ],
+                  "colwidth": [200],
                   "backgroundColor": null
                 },
                 "content": [
@@ -46,10 +44,7 @@
                 "attrs": {
                   "colspan": 3,
                   "rowspan": 1,
-                  "colwidth": [
-                    150,
-                    100
-                  ],
+                  "colwidth": [150, 100],
                   "backgroundColor": null
                 },
                 "content": [
@@ -77,9 +72,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    200
-                  ],
+                  "colwidth": [200],
                   "backgroundColor": null
                 },
                 "content": [
@@ -102,9 +95,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    150
-                  ],
+                  "colwidth": [150],
                   "backgroundColor": null
                 },
                 "content": [
@@ -127,9 +118,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    100
-                  ],
+                  "colwidth": [100],
                   "backgroundColor": null
                 },
                 "content": [
@@ -180,9 +169,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    200
-                  ],
+                  "colwidth": [200],
                   "backgroundColor": null
                 },
                 "content": [
@@ -205,9 +192,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    150
-                  ],
+                  "colwidth": [150],
                   "backgroundColor": null
                 },
                 "content": [
@@ -230,9 +215,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    100
-                  ],
+                  "colwidth": [100],
                   "backgroundColor": null
                 },
                 "content": [
@@ -283,9 +266,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    200
-                  ],
+                  "colwidth": [200],
                   "backgroundColor": null
                 },
                 "content": [
@@ -308,9 +289,7 @@
                 "attrs": {
                   "colspan": 1,
                   "rowspan": 1,
-                  "colwidth": [
-                    150
-                  ],
+                  "colwidth": [150],
                   "backgroundColor": null
                 },
                 "content": [
@@ -333,10 +312,7 @@
                 "attrs": {
                   "colspan": 2,
                   "rowspan": 1,
-                  "colwidth": [
-                    100,
-                    0
-                  ],
+                  "colwidth": [100, 0],
                   "backgroundColor": null
                 },
                 "content": [

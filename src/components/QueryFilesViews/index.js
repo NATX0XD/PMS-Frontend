@@ -24,11 +24,12 @@ const QueryFilesViews = ({ title = "" }) => {
   return (
     <>
       {!isWordOpen ? (
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl ">{title}</h1>
+        <>
+          <div className="flex justify-between items-center mb-4 pt-4">
+            <h1 className="text-2xl ">เลือก Template {title}</h1>
             <Button
               radius="lg"
+              size="sm"
               style={{
                 backgroundColor: "#4CAF50",
                 color: "white",
@@ -37,7 +38,7 @@ const QueryFilesViews = ({ title = "" }) => {
               onPress={() => setIsWordOpen(true)}
             >
               <FaPlus />
-              เพิ่มเอกสาร
+              เพิ่ม Template
             </Button>
           </div>
           ไม่พบข้อมูล เอกสาร
@@ -55,7 +56,7 @@ const QueryFilesViews = ({ title = "" }) => {
               </p>
             </Card>
           </div> */}
-        </div>
+        </>
       ) : (
         <QueryWordEditor
           title={title}

@@ -115,13 +115,13 @@ const Sidebar = ({ isMobile }) => {
                     <Link href={child.url} key={child.title} passHref>
                       <div
                         className={clsx(
-                          "ml-6 flex items-center gap-2 px-3 py-1 text-sm rounded-md transition-colors",
+                          "ml-6 flex items-center gap-2 px-3 py-1 text-sm m-2  rounded-md transition-colors",
                           isChildActive
                             ? "bg-zinc-200 dark:bg-zinc-700 font-medium text-black dark:text-white"
                             : "text-gray-600 dark:text-gray-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         )}
                       >
-                        {child.icon}
+                        {/* {child.icon} */}
                         <span>{child.title}</span>
                       </div>
                     </Link>

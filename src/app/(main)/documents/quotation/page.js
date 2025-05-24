@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import LoadingQuotationPage from "./loading";
-import FormQuotation from "@/views/quotation";
+import FormQuotation from "@/views/documents/quotation";
 
 const Quotation = () => {
   return (
