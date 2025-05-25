@@ -18,7 +18,17 @@ export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const { theme, setTheme } = useTheme();
+  useEffect(() => {
+    let stored = getSettingsStorage();
 
+    if (!stored || Object.keys(stored).length === 0) {
+      setSettingsStorage(themeConfig);
+      stored = themeConfig;
+    }
+
+    setSettings(stored);
+    setIsHydrated(true);
+  }, []);
   useEffect(() => {
     const stored = getSettingsStorage();
     setSettings(stored);
@@ -62,8 +72,8 @@ export const SettingsProvider = ({ children }) => {
     }
   }, [theme]);
 
-  if (!isHydrated || !settings) return null;
-
+  // if (!isHydrated || !settings) return null;
+  if (!isHydrated || !settings) return <div>Loading settings...</div>;
   return (
     <SettingsContext.Provider value={{ settings, saveSettings }}>
       {children}
