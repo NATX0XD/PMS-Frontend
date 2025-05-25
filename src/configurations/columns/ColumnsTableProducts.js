@@ -1,46 +1,46 @@
 const ColumnsTableProducts = [
   {
-    key: "thumbnail",
-    label: "Product",
+    key: 'thumbnail',
+    label: 'Product',
     // width: "200px",
-    type: "image",
+    type: 'image'
   },
   {
-    key: "title",
-    label: "Title",
+    key: 'title',
+    label: 'Title',
     // width: "300px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "category",
-    label: "Category",
+    key: 'category',
+    label: 'Category',
     // width: "200px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "price",
-    label: "Price",
+    key: 'price',
+    label: 'Price',
     // width: "100px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "stock",
-    label: "Stock",
+    key: 'stock',
+    label: 'Stock',
     // width: "80px",
-    type: "text",
+    type: 'text'
   },
+  // {
+  //   key: "tags",
+  //   label: "Tags",
+  //   // width: "250px",
+  //   type: "chip",
+  // },
   {
-    key: "tags",
-    label: "Tags",
-    // width: "250px",
-    type: "chip",
-  },
-  {
-    key: "actions",
-    label: "ACTIONS",
+    key: 'actions',
+    label: 'ACTIONS',
     // width: "100px",
-    type: "actions",
-  },
-];
+    type: 'actions'
+  }
+]
 
-export default ColumnsTableProducts;
+export default ColumnsTableProducts

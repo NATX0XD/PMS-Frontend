@@ -1,17 +1,17 @@
-import { api } from "..";
+import { api } from '..'
 
-export const authController = (props) => {
-  const baseRouth = "auth";
-  const description = "เข้าสู่ระบบ";
+export const authController = props => {
+  const baseRoute = 'auth'
+  const description = 'เข้าสู่ระบบ'
   const config = {
     ...props,
     context: props?.context || null,
     router: props?.router || null,
-    description,
-  };
+    description
+  }
   return {
-    signIn: async (params) => {
-      return await api.post(`${baseRouth}/sign-in`, params, config);
-    },
-  };
-};
+    signIn: async params => {
+      return await api.post(`${baseRoute}/sign-in`, params, config)
+    }
+  }
+}
