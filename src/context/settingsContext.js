@@ -51,7 +51,6 @@ export const SettingsProvider = ({ children }) => {
   useEffect(() => {
     if (!settings) return;
 
-    // 🖌️ Apply custom palette CSS variables
     const { palette, mode } = settings;
     const theme = Palette(palette, mode);
     const root = document.documentElement;
@@ -59,7 +58,6 @@ export const SettingsProvider = ({ children }) => {
       root.style.setProperty(`--${key}`, value);
     });
 
-    // 🌙 Sync settings.mode to next-themes
     setTheme(mode === "Dark" ? "dark" : "light");
   }, [settings?.palette, settings?.mode]);
 
