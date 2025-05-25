@@ -18,7 +18,17 @@ export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const { theme, setTheme } = useTheme();
+  useEffect(() => {
+    let stored = getSettingsStorage();
 
+    if (!stored || Object.keys(stored).length === 0) {
+      setSettingsStorage(themeConfig);
+      stored = themeConfig;
+    }
+
+    setSettings(stored);
+    setIsHydrated(true);
+  }, []);
   useEffect(() => {
     const stored = getSettingsStorage();
     setSettings(stored);
@@ -41,7 +51,6 @@ export const SettingsProvider = ({ children }) => {
   useEffect(() => {
     if (!settings) return;
 
-    // 🖌️ Apply custom palette CSS variables
     const { palette, mode } = settings;
     const theme = Palette(palette, mode);
     const root = document.documentElement;
@@ -49,7 +58,6 @@ export const SettingsProvider = ({ children }) => {
       root.style.setProperty(`--${key}`, value);
     });
 
-    // 🌙 Sync settings.mode to next-themes
     setTheme(mode === "Dark" ? "dark" : "light");
   }, [settings?.palette, settings?.mode]);
 
@@ -62,8 +70,8 @@ export const SettingsProvider = ({ children }) => {
     }
   }, [theme]);
 
-  if (!isHydrated || !settings) return null;
-
+  // if (!isHydrated || !settings) return null;
+  if (!isHydrated || !settings) return <div>Loading settings...</div>;
   return (
     <SettingsContext.Provider value={{ settings, saveSettings }}>
       {children}

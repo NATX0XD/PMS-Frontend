@@ -10,7 +10,9 @@ export const Providers = ({ children }) => {
     <SessionProvider refetchOnWindowFocus={false}>
       <AuthProvider>
         <ProtectedRoute>
-          <SettingsProvider>{children}</SettingsProvider>
+          {/* <SettingsProvider> */}
+          {children}
+          {/* </SettingsProvider> */}
         </ProtectedRoute>
       </AuthProvider>
     </SessionProvider>
