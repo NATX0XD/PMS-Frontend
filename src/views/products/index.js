@@ -1,21 +1,16 @@
 'use client'
 import TableQuery from '@/components/TableQuery'
 import ColumnsTableProducts from '@/configurations/columns/ColumnsTableProducts'
-import { addToast, useDisclosure } from '@heroui/react'
+import { addToast } from '@heroui/react'
 import { useAsyncList } from '@react-stately/data'
 import React, { useState } from 'react'
 import { productController } from '@/api/controllers/products'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import ModalActionProduct from './ModalActionProduct'
+import InputItemsProducts from '@/configurations/InputItemsProducts'
 
 const FormProducts = props => {
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState(true)
-  const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onOpenChange: onModalOpenChange
-  } = useDisclosure()
 
   // //findAll
   // const { data: productData, isFetching: isFetchingProducts} = useQuery(
@@ -100,6 +95,7 @@ const FormProducts = props => {
       }
     }
   })
+
   return (
     <>
       <TableQuery
@@ -107,17 +103,14 @@ const FormProducts = props => {
         isLoading={isLoading}
         titleTable='Products List'
         columns={ColumnsTableProducts}
-        onClickCreate={onModalOpen}
+        inputItemsModal={InputItemsProducts}
+        ModalTitle='Add New Product'
+        createFunction={productController(props).create}
         // queryFunction={() => productData || { data: [] }}
         // isLoading={isFetchingProducts}
         // updateFunction={productController(props).update}
         // deleteFunction={productController(props).delete}
         // height="200px"
-      />
-      <ModalActionProduct
-        isModalOpen={isModalOpen}
-        onModalOpen={onModalOpen}
-        onModalOpenChange={onModalOpenChange}
       />
     </>
   )

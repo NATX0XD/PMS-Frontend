@@ -3,7 +3,7 @@ import TableQuery from "@/components/TableQuery";
 import ColumnsTableUsers from "@/configurations/columns/ColumnsTableUsers";
 import { useAsyncList } from "@react-stately/data";
 import React, { useState } from "react";
-
+import InputItemsProducts from '@/configurations/InputItemsProducts'
 const FormUsers = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,6 +43,9 @@ const FormUsers = () => {
       sorting={listUsers}
       isLoading={isLoading}
       columns={ColumnsTableUsers}
+      inputItemsModal={InputItemsProducts}
+        ModalTitle='Add New Account'
+        createFunction={null}
       // height="600px"
     />
   );

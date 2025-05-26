@@ -25,12 +25,13 @@ import {
 } from '@heroui/react'
 import { Input } from 'postcss'
 import React, { useCallback, useMemo, useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaTrash } from 'react-icons/fa'
 import { IoEllipsisVertical } from 'react-icons/io5'
 import { EyeIcon } from '../icon/EyeIcon'
 import { DeleteIcon } from '../icon/DeleteIcon'
 import { EditIcon } from '../icon/EditIcon'
 import ConfirmModal from '../ConfirmModal'
+import TableModalAction from '../TableModalAction'
 
 const TableQuery = ({
   titleTable,
@@ -38,8 +39,9 @@ const TableQuery = ({
   isLoading,
   columns,
   height,
-  onClickCreate,
-
+  inputItemsModal,
+  ModalTitle,
+  createFunction,
   queryFunction,
   updateFunction,
   deleteFunction
@@ -48,7 +50,17 @@ const TableQuery = ({
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const pages = Math.ceil(sorting.items.length / rowsPerPage)
-
+  const [selectedItemToDelete, setSelectedItemToDelete] = useState(null)
+  const {
+    isOpen: isConfirmModal,
+    onOpen: openConfirmModal,
+    onClose: closeConfirmModal
+  } = useDisclosure()
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onOpenChange: onModalOpenChange
+  } = useDisclosure()
   const itemsRows = useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
@@ -85,12 +97,7 @@ const TableQuery = ({
     setFilterValue('')
     setPage(1)
   }, [])
-  const [selectedItemToDelete, setSelectedItemToDelete] = useState(null)
-  const {
-    isOpen: isConfirmModal,
-    onOpen: openConfirmModal,
-    onClose: closeConfirmModal
-  } = useDisclosure()
+
   const handleDelete = (name, id) => {
     closeConfirmModal()
     console.log('Delete item:', name, id)
@@ -201,7 +208,7 @@ const TableQuery = ({
             color='primary'
             size='sm'
             endContent={<FaPlus />}
-            onPress={onClickCreate}
+            onPress={onModalOpen}
           >
             Add New
           </Button>
@@ -285,11 +292,12 @@ const TableQuery = ({
         contentHeader={'ยืนยันการลบ '}
         contentBody={
           <>
-            คุณต้องการลบ
-            <span className='font-bold text-danger'>
+            <span className='font-bold text-danger-600 dark:text-danger-400  px-1.5 py-0.5 rounded-md'>
               {selectedItemToDelete?.name}
             </span>{' '}
-            หรือไม่? การลบจะเป็นการถาวร
+            <span className='block mt-2 text-gray-500 dark:text-gray-400 text-xs'>
+              การลบจะเป็นการถาวรและไม่สามารถกู้คืนได้
+            </span>
           </>
         }
         contentButtonCancel={'ยกเลิก'}
@@ -298,8 +306,15 @@ const TableQuery = ({
         onPressButtonOk={() =>
           handleDelete(selectedItemToDelete?.name, selectedItemToDelete?.id)
         }
+        iconConfirm={<FaTrash className='text-red-500 text-xl' />}
       />
-
+      <TableModalAction
+        isModalOpen={isModalOpen}
+        onModalOpenChange={onModalOpenChange}
+        inputItemsModal={inputItemsModal}
+        ModalTitle={ModalTitle}
+        actionFunction={createFunction}
+      />
       <div className='flex flex-col h-full  w-full min-h-0'>
         <div className='flex-shrink-0'>{topContent}</div>
         <div className='flex-grow min-h-0 overflow-hidden pt-1 pb-2'>
