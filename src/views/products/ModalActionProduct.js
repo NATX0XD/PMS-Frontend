@@ -13,7 +13,11 @@ import {
 } from '@heroui/react'
 import React, { useRef, useState } from 'react'
 import { FaBoxes, FaImage, FaUpload } from 'react-icons/fa'
-const ModalAddProduct = ({ isModalOpen, onModalOpen, onModalOpenChange }) => {
+const ModalActionProduct = ({
+  isModalOpen,
+  onModalOpen,
+  onModalOpenChange
+}) => {
   const { create } = productController()
   const [imagePreview, setImagePreview] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -224,4 +228,4 @@ const ModalAddProduct = ({ isModalOpen, onModalOpen, onModalOpenChange }) => {
   )
 }
 
-export default ModalAddProduct
+export default ModalActionProduct

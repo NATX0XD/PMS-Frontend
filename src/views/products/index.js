@@ -4,9 +4,9 @@ import ColumnsTableProducts from '@/configurations/columns/ColumnsTableProducts'
 import { addToast, useDisclosure } from '@heroui/react'
 import { useAsyncList } from '@react-stately/data'
 import React, { useState } from 'react'
-import ModalAddProduct from './ModalAddProduct'
 import { productController } from '@/api/controllers/products'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import ModalActionProduct from './ModalActionProduct'
 
 const FormProducts = props => {
   const queryClient = useQueryClient()
@@ -114,7 +114,7 @@ const FormProducts = props => {
         // deleteFunction={productController(props).delete}
         // height="200px"
       />
-      <ModalAddProduct
+      <ModalActionProduct
         isModalOpen={isModalOpen}
         onModalOpen={onModalOpen}
         onModalOpenChange={onModalOpenChange}

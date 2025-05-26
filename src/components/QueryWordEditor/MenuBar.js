@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import {
   Button,
   Card,
@@ -15,20 +15,21 @@ import {
   Select,
   SelectItem,
   Tooltip,
-  useDisclosure,
-} from "@heroui/react";
-import React, { useState } from "react";
+  useDisclosure
+} from '@heroui/react'
+import React, { useState } from 'react'
 import {
   IoArrowBack,
   IoOptionsOutline,
-  IoSettingsOutline,
-} from "react-icons/io5";
-import ModalLayoutSetting from "./ModalLayoutSetting";
-import { debounce } from "lodash";
-import { MdCancel, MdOutlineMoreVert } from "react-icons/md";
-import { FaFileImport, FaImage, FaRegSave } from "react-icons/fa";
-import TableOptions from "@/configurations/WordEditorItems/TableOptions";
-import DrawerOptionTable from "./DrawerOptionTable";
+  IoSettingsOutline
+} from 'react-icons/io5'
+import ModalLayoutSetting from './ModalLayoutSetting'
+import { debounce } from 'lodash'
+import { MdCancel, MdOutlineMoreVert } from 'react-icons/md'
+import { FaFileImport, FaImage, FaRegSave } from 'react-icons/fa'
+import TableOptions from '@/configurations/WordEditorItems/TableOptions'
+import DrawerOptionTable from './DrawerOptionTable'
+import ConfirmModal from '../ConfirmModal'
 
 const MenuBar = ({
   editor,
@@ -51,78 +52,92 @@ const MenuBar = ({
   saveAsJson,
   handleFileUpload,
   setIsWordOpen,
-  isWordOpen,
+  isWordOpen
 }) => {
   if (!editor) {
-    return null;
+    return null
   }
-  const { handleChangePageLayout, valuePageLayout } = pageLayoutFunction;
-  const [openFontColor, setOpenFontColor] = useState(false);
-  const [openTableColor, setOpenTableColor] = useState(false);
-  const [openPageLayoutSetting, setOpenPageLayoutSetting] = useState(false);
-  const [tempPageLayout, setTempPageLayout] = useState(null);
-  const [arrangement, setArrangement] = useState("vertical");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { handleChangePageLayout, valuePageLayout } = pageLayoutFunction
+  const [openFontColor, setOpenFontColor] = useState(false)
+  const [openTableColor, setOpenTableColor] = useState(false)
+  const [openPageLayoutSetting, setOpenPageLayoutSetting] = useState(false)
+  const [tempPageLayout, setTempPageLayout] = useState(null)
+  const [arrangement, setArrangement] = useState('vertical')
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const {
+    isOpen: isConfirmModal,
+    onOpen: openConfirmModal,
+    onClose: closeConfirmModal
+  } = useDisclosure()
+  const handleExit = () => {
+    setIsWordOpen(false)
+    closeConfirmModal()
+  }
+  const {
+    isOpen: isDrawer,
+    onOpen: openDrawer,
+    onClose: closeDrawer
+  } = useDisclosure()
 
   const handleOpenPageLayoutSetting = () => {
-    setOpenPageLayoutSetting(true);
-  };
+    setOpenPageLayoutSetting(true)
+  }
   const handleClosePageLayoutSetting = () => {
-    setOpenPageLayoutSetting(false);
-  };
+    setOpenPageLayoutSetting(false)
+  }
   const changePageLayout = () => {
     if (tempPageLayout !== null) {
       Object.entries(tempPageLayout).forEach(([key, value]) => {
-        handleChangePageLayout(key, value);
-      });
-      setTempPageLayout(null);
+        handleChangePageLayout(key, value)
+      })
+      setTempPageLayout(null)
     } else {
       //   message.open({
       //     type: "error",
       //     content: "กรุณากรอกค่า",
       //   });
-      console.log("กรุณากรอกค่า");
+      console.log('กรุณากรอกค่า')
     }
     // setOpenPageLayoutSetting(false);
-  };
+  }
   const handleInputChange = debounce((type, value) => {
-    if (type === "resetValue") {
-      handleChangePageLayout(type, value);
-      setTempPageLayout(null);
-      setArrangement("vertical");
-    } else if (type === "horizontal") {
-      handleChangePageLayout(type, value);
-      setArrangement("horizontal");
-    } else if (type === "vertical") {
-      handleChangePageLayout(type, value);
-      setArrangement("vertical");
+    if (type === 'resetValue') {
+      handleChangePageLayout(type, value)
+      setTempPageLayout(null)
+      setArrangement('vertical')
+    } else if (type === 'horizontal') {
+      handleChangePageLayout(type, value)
+      setArrangement('horizontal')
+    } else if (type === 'vertical') {
+      handleChangePageLayout(type, value)
+      setArrangement('vertical')
     } else {
-      setTempPageLayout((prev) => ({
+      setTempPageLayout(prev => ({
         ...prev,
-        [type]: value,
-      }));
+        [type]: value
+      }))
     }
-  }, 500);
+  }, 500)
 
   // const handleChangeFontFormat = debounce((value) => {
   //   const level = parseInt(value.slice(1));
   //   editor.chain().focus().toggleHeading({ level }).run();
   // }, 100);
-  const handleChangeSizeFont = debounce((value) => {
+  const handleChangeSizeFont = debounce(value => {
     if (value) {
-      editor.chain().focus().setFontSize(`${value}px`).run();
+      editor.chain().focus().setFontSize(`${value}px`).run()
     }
-  }, 400);
-  const handleChangeFontFormat = debounce((value) => {
-    let selected = value;
-    if (value && typeof value === "object" && value.size) {
-      selected = Array.from(value)[0];
+  }, 400)
+  const handleChangeFontFormat = debounce(value => {
+    let selected = value
+    if (value && typeof value === 'object' && value.size) {
+      selected = Array.from(value)[0]
     }
-    if (typeof selected === "string" && selected.startsWith("h")) {
-      const level = parseInt(selected.slice(1));
-      editor.chain().focus().toggleHeading({ level }).run();
+    if (typeof selected === 'string' && selected.startsWith('h')) {
+      const level = parseInt(selected.slice(1))
+      editor.chain().focus().toggleHeading({ level }).run()
     }
-  }, 100);
+  }, 100)
   // const handleChangeFontColor = debounce((value) => {
   //   try {
   //     if (value && value.toHexString) {
@@ -137,14 +152,14 @@ const MenuBar = ({
   //     console.log("ไม่สามารถเปลี่ยนสีตัวอักษรได้", error);
   //   }
   // }, 200);
-  const handleChangeFontColor = (event) => {
+  const handleChangeFontColor = event => {
     try {
-      const hexColor = event.target.value;
-      editor.chain().focus().setColor(hexColor).run();
+      const hexColor = event.target.value
+      editor.chain().focus().setColor(hexColor).run()
     } catch (error) {
-      console.log("ไม่สามารถเปลี่ยนสีตัวอักษรได้", error);
+      console.log('ไม่สามารถเปลี่ยนสีตัวอักษรได้', error)
     }
-  };
+  }
   // const handleChangeTableColor = debounce((value) => {
   //   try {
   //     if (value && value.toHexString) {
@@ -162,113 +177,91 @@ const MenuBar = ({
   //     console.log("ไม่สามารถเปลี่ยนสีตารางได้", error);
   //   }
   // }, 200);
-  const handleChangeTableColor = (event) => {
-    const hexColor = event.target.value;
+  const handleChangeTableColor = event => {
+    const hexColor = event.target.value
     editor
       .chain()
       .focus()
-      .setCellAttribute("backgroundColor", hexColor, { header: true })
-      .run();
-  };
+      .setCellAttribute('backgroundColor', hexColor, { header: true })
+      .run()
+  }
 
   const getActiveHeading = () => {
     for (let level = 1; level <= 4; level++) {
-      if (editor.isActive("heading", { level })) {
-        return `h${level}`;
+      if (editor.isActive('heading', { level })) {
+        return `h${level}`
       }
     }
-    return null;
-  };
+    return null
+  }
   const currentFontColor =
-    editor?.getAttributes("textStyle")?.color || "#000000";
+    editor?.getAttributes('textStyle')?.color || '#000000'
 
-  const getCurrentTableColor = (editor) => {
-    const cellAttrs = editor.getAttributes("tableCell");
-    const headerAttrs = editor.getAttributes("tableHeader");
-    if (cellAttrs.backgroundColor) return cellAttrs.backgroundColor;
-    if (headerAttrs.backgroundColor) return headerAttrs.backgroundColor;
-    return "#FFFFFF";
-  };
-  const currentTableColor = getCurrentTableColor(editor);
+  const getCurrentTableColor = editor => {
+    const cellAttrs = editor.getAttributes('tableCell')
+    const headerAttrs = editor.getAttributes('tableHeader')
+    if (cellAttrs.backgroundColor) return cellAttrs.backgroundColor
+    if (headerAttrs.backgroundColor) return headerAttrs.backgroundColor
+    return '#FFFFFF'
+  }
+  const currentTableColor = getCurrentTableColor(editor)
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleFileChange = event => {
+    const file = event.target.files[0]
+    if (!file) return
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = () => {
-      const base64 = reader.result;
+      const base64 = reader.result
 
-      editor.chain().focus().setImage({ src: base64 }).run();
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const data = JSON.parse(event.target.result);
-          editor?.commands.setContent(data.content);
-          const layout = data.pageLayout || {};
-          setWidthPage(layout.widthPage || "210");
-          setHeightPage(layout.heightPage || "297");
-          setPaddingTop(layout.paddingTop || "15");
-          setPaddingBottom(layout.paddingBottom || "15");
-          setPaddingLeft(layout.paddingLeft || "20");
-          setPaddingRight(layout.paddingRight || "20");
-          alert("โหลดไฟล์ JSON ได้");
-        } catch (error) {
-          alert("ไม่สามารถโหลดไฟล์ JSON ได้");
-        }
-      };
-      reader.readAsText(file);
+      editor.chain().focus().setImage({ src: base64 }).run()
     }
-  };
-  const {
-    isOpen: isConfirmModal,
-    onOpen: openConfirmModal,
-    onClose: closeConfirmModal,
-  } = useDisclosure();
-  const handleExit = () => {
-    setIsWordOpen(false);
-    closeConfirmModal();
-  };
-  const {
-    isOpen: isDrawer,
-    onOpen: openDrawer,
-    onClose: closeDrawer,
-  } = useDisclosure();
+    reader.readAsDataURL(file)
+  }
+
+  const handleUpload = e => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = event => {
+        try {
+          const data = JSON.parse(event.target.result)
+          editor?.commands.setContent(data.content)
+          const layout = data.pageLayout || {}
+          setWidthPage(layout.widthPage || '210')
+          setHeightPage(layout.heightPage || '297')
+          setPaddingTop(layout.paddingTop || '15')
+          setPaddingBottom(layout.paddingBottom || '15')
+          setPaddingLeft(layout.paddingLeft || '20')
+          setPaddingRight(layout.paddingRight || '20')
+          alert('โหลดไฟล์ JSON ได้')
+        } catch (error) {
+          alert('ไม่สามารถโหลดไฟล์ JSON ได้')
+        }
+      }
+      reader.readAsText(file)
+    }
+  }
 
   return (
     <>
       {/* // <Card className="w-full p-2 rounded-xl shadow-sm"> */}
-      <div className=" flex flex-row items-center justify-center gap-2">
-        <Modal isOpen={isConfirmModal} onOpenChange={closeConfirmModal}>
-          <ModalContent>
-            <ModalHeader className="flex flex-col gap-1">
-              ยืนยันการออกจากเอกสาร
-            </ModalHeader>
-            <ModalBody>
+      <div className=' flex flex-row items-center justify-center gap-2'>
+        <ConfirmModal
+          isOpen={isConfirmModal}
+          onOpenChange={closeConfirmModal}
+          contentHeader={'ยืนยันการออกจากเอกสาร'}
+          contentBody={
+            <>
               คุณต้องการออกจากเอกสารนี้หรือไม่? <br />
               การแก้ไขปัจจุบันจะไม่ถูกบันทึกหากยังไม่ได้บันทึกไฟล์.
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="danger"
-                variant="light"
-                onPress={closeConfirmModal}
-              >
-                ยกเลิก
-              </Button>
-              <Button color="primary" onPress={handleExit}>
-                ออกจากเอกสาร
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+            </>
+          }
+          contentButtonCancel={'ยกเลิก'}
+          contentButtonOk={'ออกจากเอกสาร'}
+          onPressButtonCancel={closeConfirmModal}
+          onPressButtonOk={handleExit}
+        />
 
         <Dropdown>
           <DropdownTrigger>
@@ -276,72 +269,72 @@ const MenuBar = ({
               style={{
                 fontSize: 20,
                 padding: 0,
-                margin: 0,
+                margin: 0
               }}
-              variant={"bordered"}
+              variant={'bordered'}
               isIconOnly
-              size="md"
-              radius="sm"
+              size='md'
+              radius='sm'
             >
               <MdOutlineMoreVert />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu aria-label="Editor Actions">
+          <DropdownMenu aria-label='Editor Actions'>
             {isWordOpen && (
-              <DropdownItem key="save" onPress={openConfirmModal}>
+              <DropdownItem key='save' onPress={openConfirmModal}>
                 {/* <Button isIconOnly onPress={openConfirmModal}> */}
                 {/* </Button> */}
-                <div className="flex flex-row items-center gap-2">
+                <div className='flex flex-row items-center gap-2'>
                   <IoArrowBack /> ออกจากเอกสาร
                 </div>
               </DropdownItem>
             )}
             <DropdownItem
-              key="save"
+              key='save'
               onPress={saveAsJson}
               disabled={isSaving || !editor}
             >
-              <div className="flex flex-row items-center gap-2">
+              <div className='flex flex-row items-center gap-2'>
                 <FaRegSave /> Save File
               </div>
             </DropdownItem>
             <DropdownItem
-              key="save"
-              onPress={() => document.getElementById("file-upload").click()}
+              key='save'
+              onPress={() => document.getElementById('file-upload').click()}
             >
-              <div className="flex flex-row items-center gap-2">
+              <div className='flex flex-row items-center gap-2'>
                 <FaFileImport />
                 Import File Json
               </div>
             </DropdownItem>
             <DropdownItem
-              key="add image"
-              onPress={() => document.getElementById("image-upload").click()}
+              key='add image'
+              onPress={() => document.getElementById('image-upload').click()}
             >
-              <div className="flex flex-row items-center gap-2">
+              <div className='flex flex-row items-center gap-2'>
                 <FaImage /> add Images
               </div>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <input
-          id="image-upload"
-          type="file"
-          accept="image/*"
+          id='image-upload'
+          type='file'
+          accept='image/*'
           onChange={handleFileChange}
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
         />
         <input
-          type="file"
-          id="file-upload"
-          style={{ display: "none" }}
-          accept=".json,.docx,.pdf"
+          type='file'
+          id='file-upload'
+          style={{ display: 'none' }}
+          accept='.json,.docx,.pdf'
           onChange={handleFileUpload}
         />
 
-        <div className="flex flex-row items-center gap-2">
+        <div className='flex flex-row items-center gap-2'>
           {fontSize || fontColor || fontFormat ? (
-            <div className="flex flex-row items-center gap-5">
+            <div className='flex flex-row items-center gap-5'>
               {/* {fontFormat && (
                 <Tooltip showArrow={true} content="Format Type">
                   <Select
@@ -369,15 +362,15 @@ const MenuBar = ({
                 </Tooltip>
               )} */}
               {fontSize && (
-                <Tooltip showArrow={true} content="Font size">
+                <Tooltip showArrow={true} content='Font size'>
                   <NumberInput
-                    radius="md"
-                    size="sm"
+                    radius='md'
+                    size='sm'
                     minValue={1}
                     defaultValue={16}
                     maxValue={106}
                     onValueChange={handleChangeSizeFont}
-                    className="max-w-[80px] "
+                    className='max-w-[80px] '
                     style={{ width: 30 }}
                   />
                 </Tooltip>
@@ -401,24 +394,24 @@ const MenuBar = ({
                 //   )}
                 // />
                 <input
-                  type="color"
+                  type='color'
                   value={currentFontColor}
                   onChange={handleChangeFontColor}
-                  className="max-w-[40px] h-10 cursor-pointer"
-                  style={{ border: "none" }}
+                  className='max-w-[40px] h-10 cursor-pointer'
+                  style={{ border: 'none' }}
                 />
               )}
             </div>
           ) : null}
           {Object.entries(
             editorsItems.reduce((groups, item) => {
-              const groupKey = item.group || "default";
-              if (!groups[groupKey]) groups[groupKey] = [];
-              groups[groupKey].push(item);
-              return groups;
+              const groupKey = item.group || 'default'
+              if (!groups[groupKey]) groups[groupKey] = []
+              groups[groupKey].push(item)
+              return groups
             }, {})
           ).map(([groupKey, groupItems]) => (
-            <div className="flex flex-row items-center gap-5" key={groupKey}>
+            <div className='flex flex-row items-center gap-5' key={groupKey}>
               <Card
                 style={{ ...groupStyle }}
                 // styles={{
@@ -428,7 +421,7 @@ const MenuBar = ({
                 //   },
                 // }}
               >
-                <div className="flex flex-row ">
+                <div className='flex flex-row '>
                   {groupItems.map(
                     ({
                       key,
@@ -439,10 +432,10 @@ const MenuBar = ({
                       isActive,
                       canExecute,
                       size,
-                      type,
+                      type
                     }) => (
                       <React.Fragment key={key}>
-                        {key === "insertTable" ? (
+                        {key === 'insertTable' ? (
                           <>
                             <Tooltip
                               key={key}
@@ -454,8 +447,8 @@ const MenuBar = ({
                                 isIconOnly
                                 aria-label={key}
                                 size={size}
-                                radius="lg"
-                                variant="solid"
+                                radius='lg'
+                                variant='solid'
                                 onPress={onClick}
                                 isDisabled={canExecute ? !canExecute() : false}
                                 style={buttonStyle(isActive())}
@@ -463,19 +456,19 @@ const MenuBar = ({
                                 {icon}
                               </Button>
                             </Tooltip>
-                            {editor.isActive("table") && (
+                            {editor.isActive('table') && (
                               <>
                                 <Button
                                   style={{
                                     fontSize: 20,
                                     padding: 0,
-                                    margin: 0,
+                                    margin: 0
                                   }}
                                   isIconOnly
-                                  size="sm"
-                                  radius="sm"
+                                  size='sm'
+                                  radius='sm'
                                   onPress={openDrawer}
-                                  variant="light"
+                                  variant='light'
                                 >
                                   <IoOptionsOutline />
                                 </Button>
@@ -505,8 +498,8 @@ const MenuBar = ({
                               isIconOnly
                               aria-label={key}
                               size={size}
-                              radius="lg"
-                              variant="solid"
+                              radius='lg'
+                              variant='solid'
                               onPress={onClick}
                               isDisabled={canExecute ? !canExecute() : false}
                               style={buttonStyle(isActive())}
@@ -529,12 +522,12 @@ const MenuBar = ({
             style={{
               fontSize: 16,
               padding: 0,
-              margin: 0,
+              margin: 0
             }}
-            variant={"bordered"}
+            variant={'bordered'}
             isIconOnly
-            size="md"
-            radius="sm"
+            size='md'
+            radius='sm'
             onPress={onOpen}
           >
             <IoSettingsOutline />
@@ -552,7 +545,7 @@ const MenuBar = ({
       />
       {/* </Card> */}
     </>
-  );
-};
+  )
+}
 
-export default MenuBar;
+export default MenuBar

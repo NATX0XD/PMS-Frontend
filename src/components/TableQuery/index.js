@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
+  useDisclosure,
   User
 } from '@heroui/react'
 import { Input } from 'postcss'
@@ -29,6 +30,7 @@ import { IoEllipsisVertical } from 'react-icons/io5'
 import { EyeIcon } from '../icon/EyeIcon'
 import { DeleteIcon } from '../icon/DeleteIcon'
 import { EditIcon } from '../icon/EditIcon'
+import ConfirmModal from '../ConfirmModal'
 
 const TableQuery = ({
   titleTable,
@@ -83,6 +85,16 @@ const TableQuery = ({
     setFilterValue('')
     setPage(1)
   }, [])
+  const [selectedItemToDelete, setSelectedItemToDelete] = useState(null)
+  const {
+    isOpen: isConfirmModal,
+    onOpen: openConfirmModal,
+    onClose: closeConfirmModal
+  } = useDisclosure()
+  const handleDelete = (name, id) => {
+    closeConfirmModal()
+    console.log('Delete item:', name, id)
+  }
 
   const renderCell = useCallback(
     (item, columnKey) => {
@@ -150,7 +162,10 @@ const TableQuery = ({
               </span>
 
               <span
-                // onClick={}
+                onClick={() => {
+                  setSelectedItemToDelete({ name: item.title, id: item.id })
+                  openConfirmModal()
+                }}
                 className='text-lg text-danger cursor-pointer  active:opacity-50'
               >
                 <DeleteIcon />
@@ -264,6 +279,27 @@ const TableQuery = ({
 
   return (
     <>
+      <ConfirmModal
+        isOpen={isConfirmModal}
+        onOpenChange={closeConfirmModal}
+        contentHeader={'ยืนยันการลบ '}
+        contentBody={
+          <>
+            คุณต้องการลบ
+            <span className='font-bold text-danger'>
+              {selectedItemToDelete?.name}
+            </span>{' '}
+            หรือไม่? การลบจะเป็นการถาวร
+          </>
+        }
+        contentButtonCancel={'ยกเลิก'}
+        contentButtonOk={'ลบ'}
+        onPressButtonCancel={closeConfirmModal}
+        onPressButtonOk={() =>
+          handleDelete(selectedItemToDelete?.name, selectedItemToDelete?.id)
+        }
+      />
+
       <div className='flex flex-col h-full  w-full min-h-0'>
         <div className='flex-shrink-0'>{topContent}</div>
         <div className='flex-grow min-h-0 overflow-hidden pt-1 pb-2'>
