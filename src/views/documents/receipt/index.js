@@ -1,14 +1,12 @@
-import QueryFilesViews from "@/components/QueryFilesViews";
-import React from "react";
-import CreateDocument from "../CreateDocument";
+import QueryFilesViews from '@/components/QueryFilesViews'
+import React from 'react'
 
 const FormReceipt = () => {
   return (
     <div>
-      {/* <QueryFilesViews title="ใบเสร็จรับเงิน" /> */}
-      <CreateDocument title="ใบเสร็จรับเงิน" docName="RC021054PDF" />
+      <QueryFilesViews title='ใบเสร็จรับเงิน' />
     </div>
-  );
-};
+  )
+}
 
-export default FormReceipt;
+export default FormReceipt

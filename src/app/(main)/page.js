@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 import {
   Navbar,
   NavbarBrand,
@@ -7,16 +7,17 @@ import {
   NavbarItem,
   Link,
   Button,
-  Card,
-} from "@heroui/react";
-import { useSession } from "next-auth/react";
-import HomeDashboard from "@/views/home";
+  Card
+} from '@heroui/react'
+import { useSession } from 'next-auth/react'
+import HomeDashboard from '@/views/home'
+import { useSetPageTitle } from '@/helpers/useSetPageTitle'
 
 const Page = () => {
-  const { data: session, status } = useSession();
-
+  useSetPageTitle('Home Dashboard')
+  const { data: session, status } = useSession()
   // ตรวจสอบสถานะของ session ก่อนเข้าถึง
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === 'loading') return <div>Loading...</div>
 
   return (
     <>
@@ -39,7 +40,7 @@ const Page = () => {
 
       <HomeDashboard />
     </>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

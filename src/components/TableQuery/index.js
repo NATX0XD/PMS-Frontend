@@ -21,35 +21,50 @@ import {
   TableRow,
   Tooltip,
   useDisclosure,
-  User
+  User,
+  Input
 } from '@heroui/react'
-import { Input } from 'postcss'
 import React, { useCallback, useMemo, useState } from 'react'
-import { FaPlus, FaTrash } from 'react-icons/fa'
+import { FaChevronDown, FaPlus, FaTrash } from 'react-icons/fa'
 import { IoEllipsisVertical } from 'react-icons/io5'
 import { EyeIcon } from '../icon/EyeIcon'
 import { DeleteIcon } from '../icon/DeleteIcon'
 import { EditIcon } from '../icon/EditIcon'
 import ConfirmModal from '../ConfirmModal'
 import TableModalAction from '../TableModalAction'
+import { IoIosSearch } from 'react-icons/io'
+
+export function capitalize (s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : ''
+}
 
 const TableQuery = ({
   titleTable,
-  sorting,
-  isLoading,
-  columns,
+  dataAll = [],
+  isLoading = false,
+  columns = null,
   height,
-  inputItemsModal,
-  ModalTitle,
-  createFunction,
-  queryFunction,
-  updateFunction,
-  deleteFunction
+  isModalAction = true,
+  inputItemsModal = null,
+  ModalTitle = null,
+  createFunction = null,
+  queryFunction = null,
+  updateFunction = null,
+  deleteFunction = null,
+  searchField = 'name',
+  searchPlaceholder = 'Search',
+  initialVisibleColumns = ['actions'],
+  actionButton = true,
+  renderActionButton = null,
+  searchBar = true,
+  columnsFilter = true,
+  isTopContent = true,
+  isBottomContent = true,
+  renderTopContent = null,
+  renderBottomContent = null,
+  statusColorMap = null,
+  statusMapKey = null
 }) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set([]))
-  const [page, setPage] = useState(1)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const pages = Math.ceil(sorting.items.length / rowsPerPage)
   const [selectedItemToDelete, setSelectedItemToDelete] = useState(null)
   const {
     isOpen: isConfirmModal,
@@ -61,47 +76,70 @@ const TableQuery = ({
     onOpen: onModalOpen,
     onOpenChange: onModalOpenChange
   } = useDisclosure()
-  const itemsRows = useMemo(() => {
+  const [filterValue, setFilterValue] = useState('')
+  const [selectedKeys, setSelectedKeys] = useState(new Set([]))
+  const [visibleColumns, setVisibleColumns] = useState(
+    new Set(initialVisibleColumns)
+  )
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [sortDescriptor, setSortDescriptor] = useState({
+    column: 'age',
+    direction: 'ascending'
+  })
+  const [page, setPage] = useState(1)
+  const hasSearchFilter = Boolean(filterValue)
+
+  const headerColumns = React.useMemo(() => {
+    if (visibleColumns === 'all') return columns
+
+    return columns.filter(
+      column =>
+        Array.from(visibleColumns).includes(column.key) ||
+        column.key === 'actions'
+    )
+  }, [visibleColumns, columns])
+
+  const filteredItems = React.useMemo(() => {
+    let filteredData = [...dataAll]
+
+    if (hasSearchFilter) {
+      filteredData = filteredData.filter(item =>
+        ((item[searchField] || '') + '')
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
+      )
+    }
+    if (
+      statusFilter !== 'all' &&
+      Array.from(statusFilter).length !== statusOptions.length
+    ) {
+      filteredData = filteredData.filter(user =>
+        Array.from(statusFilter).includes(user.status)
+      )
+    }
+
+    return filteredData
+  }, [dataAll, hasSearchFilter, statusFilter, searchField, filterValue])
+
+  const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1
+
+  const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
 
-    return sorting.items.slice(start, end)
-  }, [page, sorting, rowsPerPage])
+    return filteredItems.slice(start, end)
+  }, [page, filteredItems, rowsPerPage])
 
-  const onNextPage = useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1)
-    }
-  }, [page, pages])
+  const sortedItems = React.useMemo(() => {
+    return [...items].sort((a, b) => {
+      const first = a[sortDescriptor.column]
+      const second = b[sortDescriptor.column]
+      const cmp = first < second ? -1 : first > second ? 1 : 0
 
-  const onPreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1)
-    }
-  }, [page])
-  const onRowsPerPageChange = useCallback(e => {
-    setRowsPerPage(Number(e.target.value))
-    setPage(1)
-  }, [])
-
-  const onSearchChange = useCallback(value => {
-    if (value) {
-      setFilterValue(value)
-      setPage(1)
-    } else {
-      setFilterValue('')
-    }
-  }, [])
-
-  const onClear = useCallback(() => {
-    setFilterValue('')
-    setPage(1)
-  }, [])
-
-  const handleDelete = (name, id) => {
-    closeConfirmModal()
-    console.log('Delete item:', name, id)
-  }
+      return sortDescriptor.direction === 'descending' ? -cmp : cmp
+    })
+  }, [sortDescriptor, items])
 
   const renderCell = useCallback(
     (item, columnKey) => {
@@ -110,7 +148,7 @@ const TableQuery = ({
       if (!column) return cellValue
 
       switch (column.type) {
-        case 'users':
+        case 'profile':
           return (
             <User
               avatarProps={{ radius: 'lg', src: cellValue }}
@@ -131,7 +169,17 @@ const TableQuery = ({
             <div className='flex gap-2 flex-wrap'>
               {(Array.isArray(cellValue) ? cellValue : [cellValue]).map(
                 (tag, idx) => (
-                  <Chip key={idx} color='primary' size='sm'>
+                  <Chip
+                    key={idx}
+                    className='capitalize'
+                    color={
+                      statusColorMap && statusMapKey
+                        ? statusColorMap[item[statusMapKey]] || 'secondary'
+                        : 'secondary'
+                    }
+                    size='sm'
+                    variant='flat'
+                  >
                     {tag}
                   </Chip>
                 )
@@ -140,20 +188,6 @@ const TableQuery = ({
           )
         case 'actions':
           return (
-            // <div className="relative flex justify-end items-center gap-2">
-            //   <Dropdown className="min-w-[120px]">
-            //     <DropdownTrigger>
-            //       <Button isIconOnly size="sm" variant="light">
-            //         <IoEllipsisVertical />
-            //       </Button>
-            //     </DropdownTrigger>
-            //     <DropdownMenu>
-            //       <DropdownItem key="view">View</DropdownItem>
-            //       <DropdownItem key="edit">Edit</DropdownItem>
-            //       <DropdownItem key="delete">Delete</DropdownItem>
-            //     </DropdownMenu>
-            //   </Dropdown>
-            // </div>
             <div className='relative flex items-center gap-2'>
               <span
                 // onClick={}
@@ -170,7 +204,10 @@ const TableQuery = ({
 
               <span
                 onClick={() => {
-                  setSelectedItemToDelete({ name: item.title, id: item.id })
+                  setSelectedItemToDelete({
+                    name: [item[searchField]],
+                    id: item.id
+                  })
                   openConfirmModal()
                 }}
                 className='text-lg text-danger cursor-pointer  active:opacity-50'
@@ -185,104 +222,203 @@ const TableQuery = ({
     },
     [columns]
   )
-  const topContent = useMemo(() => {
-    return (
-      <div className='flex flex-col gap-4 '>
-        <div className='flex justify-between gap-3 items-center'>
-          <h1 className='text-xl font-bold p-2'>
-            {' '}
-            {titleTable}{' '}
-            {selectedKeys.size > 0 || selectedKeys === 'all' ? (
-              <span className='w-[30%] text-small text-default-400'>
-                {selectedKeys === 'all'
-                  ? 'All items selected'
-                  : `${selectedKeys.size} of ${sorting.items.length} selected`}
-              </span>
+  const handleDelete = (name, id) => {
+    closeConfirmModal()
+    console.log('Delete item:', name, id)
+  }
+
+  const onNextPage = React.useCallback(() => {
+    if (page < pages) {
+      setPage(page + 1)
+    }
+  }, [page, pages])
+
+  const onPreviousPage = React.useCallback(() => {
+    if (page > 1) {
+      setPage(page - 1)
+    }
+  }, [page])
+
+  const onRowsPerPageChange = React.useCallback(e => {
+    setRowsPerPage(Number(e.target.value))
+    setPage(1)
+  }, [])
+
+  const onSearchChange = React.useCallback(value => {
+    if (value) {
+      setFilterValue(value)
+      setPage(1)
+    } else {
+      setFilterValue('')
+    }
+  }, [])
+
+  const onClear = React.useCallback(() => {
+    setFilterValue('')
+    setPage(1)
+  }, [])
+
+  const topContent = React.useMemo(() => {
+    return isTopContent ? (
+      <div className='flex flex-col gap-4'>
+        <div className='flex justify-between gap-3 items-end'>
+          {searchBar ? (
+            <Input
+              isClearable
+              className='w-full sm:max-w-[44%]'
+              placeholder={searchPlaceholder}
+              startContent={<IoIosSearch />}
+              value={filterValue}
+              onClear={() => onClear()}
+              onValueChange={onSearchChange}
+              classNames={{
+                label: 'text-black/50 dark:text-white/90',
+                input: [
+                  'bg-white',
+                  'text-black/90 dark:text-white/90',
+                  'placeholder:text-default-700/50 dark:placeholder:text-white/60'
+                ],
+                inputWrapper: [
+                  'bg-white',
+                  'hover:bg-white',
+                  'group-data-[focus=true]:bg-white',
+                  'dark:bg-zinc-700',
+                  'dark:hover:bg-zinc-700',
+                  'dark:group-data-[focus=true]:bg-zinc-700',
+                  '!cursor-text'
+                ]
+              }}
+            />
+          ) : null}
+          <div className='flex gap-3'>
+            {columnsFilter ? (
+              <Dropdown>
+                <DropdownTrigger className='hidden sm:flex'>
+                  <Button endContent={<FaChevronDown />} variant='flat'>
+                    Columns
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label='Table Columns'
+                  closeOnSelect={false}
+                  selectedKeys={visibleColumns}
+                  selectionMode='multiple'
+                  onSelectionChange={setVisibleColumns}
+                >
+                  {columns
+                    .filter(column => column.key !== 'actions')
+                    .map(column => (
+                      <DropdownItem key={column.key} className='capitalize'>
+                        {capitalize(column.label)}
+                      </DropdownItem>
+                    ))}
+                </DropdownMenu>
+              </Dropdown>
+            ) : null}
+            {actionButton ? (
+              <Button
+                color='primary'
+                size='md'
+                endContent={<FaPlus />}
+                onPress={onModalOpen}
+              >
+                Add New
+              </Button>
             ) : (
-              <span className='text-default-400 text-small'>
-                Total {sorting.items.length}
-              </span>
+              renderActionButton
             )}
-          </h1>
+          </div>
+        </div>
+        <div className='flex justify-between items-center'>
+          <span className='text-default-400 text-small'>
+            Total {dataAll.length}
+          </span>
+          <label className='flex items-center text-default-400 text-small'>
+            Rows per page:
+            <select
+              className='bg-transparent outline-none text-default-400 text-small'
+              defaultValue={rowsPerPage}
+              onChange={onRowsPerPageChange}
+            >
+              <option value='10'>10</option>
+              <option value='15'>15</option>
+              <option value='20'>20</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    ) : (
+      renderTopContent
+    )
+  }, [
+    isTopContent,
+    searchBar,
+    searchPlaceholder,
+    filterValue,
+    onSearchChange,
+    columnsFilter,
+    visibleColumns,
+    columns,
+    actionButton,
+    onModalOpen,
+    renderActionButton,
+    dataAll.length,
+    rowsPerPage,
+    onRowsPerPageChange,
+    renderTopContent,
+    onClear
+  ])
+
+  const bottomContent = React.useMemo(() => {
+    return isBottomContent ? (
+      <div className='py-2 px-2 flex justify-between items-center'>
+        <span className='w-[30%] text-small text-default-400'>
+          {selectedKeys === 'all'
+            ? 'All items selected'
+            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+        </span>
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color='primary'
+          page={page}
+          total={pages}
+          onChange={setPage}
+        />
+        <div className='hidden sm:flex w-[30%] justify-end gap-2'>
           <Button
-            color='primary'
+            isDisabled={page === 1}
             size='sm'
-            endContent={<FaPlus />}
-            onPress={onModalOpen}
+            variant='flat'
+            onPress={onPreviousPage}
           >
-            Add New
+            Previous
+          </Button>
+          <Button
+            isDisabled={page === pages}
+            size='sm'
+            variant='flat'
+            onPress={onNextPage}
+          >
+            Next
           </Button>
         </div>
       </div>
+    ) : (
+      renderBottomContent
     )
-  }, [selectedKeys, sorting.items.length, page, pages, onRowsPerPageChange])
-
-  const bottomContent = useMemo(() => {
-    return (
-      <div className='flex justify-between items-center'>
-        {pages > 0 ? (
-          <>
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color='primary'
-              page={page}
-              total={pages}
-              onChange={setPage}
-            />
-          </>
-        ) : null}
-
-        {pages > 0 ? (
-          <>
-            <div className='hidden sm:flex w-[30%] justify-end gap-2'>
-              <label className='flex items-center text-default-400 text-small'>
-                Rows per page:
-                {/* <Select
-              className="max-w-xs"
-              size="sm"
-              selectedKeys={new Set([rowsPerPage.toString()])}
-              variant="bordered"
-              onSelectionChange={onRowsPerPageChange}
-            >
-              <SelectItem key="5">5</SelectItem>
-              <SelectItem key="10">10</SelectItem>
-              <SelectItem key="15">15</SelectItem>
-            </Select> */}
-                <select
-                  className='bg-transparent outline-none text-default-400 text-small'
-                  defaultValue={rowsPerPage}
-                  // value={rowsPerPage}
-                  onChange={onRowsPerPageChange}
-                >
-                  <option value='5'>5</option>
-                  <option value='10'>10</option>
-                  <option value='15'>15</option>
-                </select>
-              </label>
-              <Button
-                isDisabled={page === 1}
-                size='sm'
-                variant='flat'
-                onPress={onPreviousPage}
-              >
-                Previous
-              </Button>
-              <Button
-                isDisabled={page === pages}
-                size='sm'
-                variant='flat'
-                onPress={onNextPage}
-              >
-                Next
-              </Button>
-            </div>
-          </>
-        ) : null}
-      </div>
-    )
-  }, [selectedKeys, sorting.items.length, page, pages, onRowsPerPageChange])
+  }, [
+    isBottomContent,
+    selectedKeys,
+    filteredItems.length,
+    page,
+    pages,
+    onPreviousPage,
+    onNextPage,
+    renderBottomContent
+  ])
 
   return (
     <>
@@ -308,13 +444,16 @@ const TableQuery = ({
         }
         iconConfirm={<FaTrash className='text-red-500 text-xl' />}
       />
-      <TableModalAction
-        isModalOpen={isModalOpen}
-        onModalOpenChange={onModalOpenChange}
-        inputItemsModal={inputItemsModal}
-        ModalTitle={ModalTitle}
-        actionFunction={createFunction}
-      />
+      {isModalAction ? (
+        <TableModalAction
+          isModalOpen={isModalOpen}
+          onModalOpenChange={onModalOpenChange}
+          inputItemsModal={inputItemsModal}
+          ModalTitle={ModalTitle}
+          actionFunction={createFunction}
+        />
+      ) : null}
+
       <div className='flex flex-col h-full  w-full min-h-0'>
         <div className='flex-shrink-0'>{topContent}</div>
         <div className='flex-grow min-h-0 overflow-hidden pt-1 pb-2'>
@@ -325,19 +464,24 @@ const TableQuery = ({
             selectionMode='multiple'
             onSelectionChange={setSelectedKeys}
             color='primary'
-            sortDescriptor={sorting.sortDescriptor}
-            onSortChange={sorting.sort}
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
             // onRowAction={key => {
-            //   const selectedItem = itemsRows.find(item => item.id === key)
+            //   const selectedItem = sortedItems.find(item => item.id === key)
             //   console.log(selectedItem)
             //   alert(
             //     `Opening item ${key}... ${selectedItem?.firstName || 'Unknown'}`
             //   )
             // }}
+
             className='h-full w-full overflow-x-auto'
-            classNames={{ wrapper: 'h-full ' }}
+            classNames={{
+              wrapper: 'h-full ',
+              // tr: 'data-[selected=true]:bg-primary/60 data-[selected=true]:text-white',
+              td: 'data-[selected=true]:font-bold'
+            }}
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={headerColumns}>
               {column => (
                 <TableColumn
                   key={column.key}
@@ -350,7 +494,7 @@ const TableQuery = ({
               )}
             </TableHeader>
             <TableBody
-              items={itemsRows}
+              items={sortedItems}
               isLoading={isLoading}
               loadingContent={<Spinner label='Loading...' />}
               emptyContent={'No Data found'}

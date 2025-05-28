@@ -1,35 +1,47 @@
 const ColumnsTableDocuments = [
   {
-    key: "documentId",
-    label: "Document ID	",
+    key: 'id',
+    label: 'DOCUMENT ID	',
     // width: "300px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "type",
-    label: "Type",
+    key: 'type',
+    label: 'TYPE',
     // width: "200px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "customer",
-    label: "Customer",
+    key: 'customer',
+    label: 'CUSTOMER',
     // width: "100px",
-    type: "text",
+    type: 'text'
   },
   {
-    key: "status",
-    label: "Status",
+    key: 'amount',
+    label: 'AMOUNT',
+    // width: "100px",
+    type: 'text'
+  },
+  {
+    key: 'status',
+    label: 'STATUS',
     // width: "80px",
-    type: "text",
+    type: 'chip'
+  },
+  {
+    key: 'date',
+    label: 'DATE',
+    // width: "80px",
+    type: 'text'
   },
 
   {
-    key: "actions",
-    label: "ACTIONS",
+    key: 'actions',
+    label: 'ACTIONS',
     // width: "100px",
-    type: "actions",
-  },
-];
+    type: 'actions'
+  }
+]
 
-export default ColumnsTableDocuments;
+export default ColumnsTableDocuments

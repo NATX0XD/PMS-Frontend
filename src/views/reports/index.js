@@ -1,7 +1,8 @@
-import React from "react";
+'use client'
+import React from 'react'
 
 const FormReports = () => {
-  return <div>FormReports </div>;
-};
+  return <div>FormReports </div>
+}
 
-export default FormReports;
+export default FormReports

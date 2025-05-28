@@ -3,14 +3,14 @@ import TableQuery from '@/components/TableQuery'
 import ColumnsTableProducts from '@/configurations/columns/ColumnsTableProducts'
 import { addToast } from '@heroui/react'
 import { useAsyncList } from '@react-stately/data'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { productController } from '@/api/controllers/products'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import InputItemsProducts from '@/configurations/InputItemsProducts'
+import { usePageTitle } from '@/context/PageTitleContext'
 
 const FormProducts = props => {
   const queryClient = useQueryClient()
-  const [isLoading, setIsLoading] = useState(true)
 
   // //findAll
   // const { data: productData, isFetching: isFetchingProducts} = useQuery(
@@ -65,47 +65,74 @@ const FormProducts = props => {
   //   }
   // )
 
-  let list = useAsyncList({
-    async load ({ signal }) {
-      let res = await fetch('https://dummyjson.com/products', {
-        signal
-      })
-      let json = await res.json()
+  // let list = useAsyncList({
+  //   async load ({ signal }) {
+  //     let res = await fetch('https://dummyjson.com/products', {
+  //       signal
+  //     })
+  //     let json = await res.json()
 
-      setIsLoading(false)
+  //     setIsLoading(false)
 
-      return {
-        items: json.products
-      }
-    },
-    async sort ({ items, sortDescriptor }) {
-      return {
-        items: items.sort((a, b) => {
-          let first = a[sortDescriptor.column]
-          let second = b[sortDescriptor.column]
-          let cmp =
-            (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1
+  //     return {
+  //       items: json.products
+  //     }
+  //   },
+  //   async sort ({ items, sortDescriptor }) {
+  //     return {
+  //       items: items.sort((a, b) => {
+  //         let first = a[sortDescriptor.column]
+  //         let second = b[sortDescriptor.column]
+  //         let cmp =
+  //           (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1
 
-          if (sortDescriptor.direction === 'descending') {
-            cmp *= -1
-          }
+  //         if (sortDescriptor.direction === 'descending') {
+  //           cmp *= -1
+  //         }
 
-          return cmp
-        })
+  //         return cmp
+  //       })
+  //     }
+  //   }
+  // })
+  const [isLoading, setIsLoading] = useState(true)
+  const [listProducts, setListProducts] = useState([])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch('https://dummyjson.com/products')
+        const data = await res.json()
+        setListProducts(data.products)
+      } catch (err) {
+        console.error('Error fetching Products:', err)
+      } finally {
+        setIsLoading(false)
       }
     }
-  })
+
+    fetchUsers()
+  }, [])
 
   return (
     <>
       <TableQuery
-        sorting={list}
+        dataAll={listProducts}
         isLoading={isLoading}
         titleTable='Products List'
         columns={ColumnsTableProducts}
         inputItemsModal={InputItemsProducts}
         ModalTitle='Add New Product'
         createFunction={productController(props).create}
+        searchField='title'
+        searchPlaceholder='Search Title '
+        initialVisibleColumns={[
+          'thumbnail',
+          'title',
+          'category',
+          'price',
+          'stock'
+        ]}
         // queryFunction={() => productData || { data: [] }}
         // isLoading={isFetchingProducts}
         // updateFunction={productController(props).update}

@@ -1,7 +1,10 @@
-import React from "react";
+'use client'
+import { useSetPageTitle } from '@/helpers/useSetPageTitle'
+import React from 'react'
 
 const Tracking = () => {
-  return <div>Tracking</div>;
-};
+  useSetPageTitle(' Tracking')
+  return <div>Tracking</div>
+}
 
-export default Tracking;
+export default Tracking

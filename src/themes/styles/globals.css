@@ -18,6 +18,10 @@ body {
   background-color: var(--colorBgBase);
   font-family: var(--font-mi-sans), sans-serif;
 }
+/* * {
+  outline: 1px solid red;
+} */
+
 *::-webkit-scrollbar {
   width: 6px;
   height: 10px;

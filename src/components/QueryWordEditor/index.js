@@ -1,31 +1,36 @@
-"use client";
-import { EditorContent, useEditor } from "@tiptap/react";
-import React, { useEffect, useState } from "react";
+'use client'
+import { EditorContent, useEditor } from '@tiptap/react'
+import React, { useEffect, useState } from 'react'
 // import jsPDF from "jspdf";
 // import html2canvas from "html2canvas";
 
-import { extensions } from "./Extensions";
-import { content } from "./Content";
-import { FooterBar } from "./FooterBar";
-import WordEditorItems from "@/configurations/WordEditorItems/WordEditorItems";
-import { Card, Button, addToast } from "@heroui/react";
-import MenuBar from "./MenuBar";
-import * as XLSX from "xlsx";
-import { useSettings } from "@/hooks/useSettings";
-const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
-  const [zoom, setZoom] = useState(100);
-  const [widthPage, setWidthPage] = useState("210");
-  const [heightPage, setHeightPage] = useState("297");
-  const [paddingTop, setPaddingTop] = useState("15");
-  const [paddingBottom, setPaddingBottom] = useState("15");
-  const [paddingLeft, setPaddingLeft] = useState("20");
-  const [paddingRight, setPaddingRight] = useState("20");
-  const [isSaving, setIsSaving] = useState(false);
+import { extensions } from './Extensions'
+import { content } from './Content'
+import { FooterBar } from './FooterBar'
+import WordEditorItems from '@/configurations/WordEditorItems/WordEditorItems'
+import { Card, Button, addToast } from '@heroui/react'
+import MenuBar from './MenuBar'
+import * as XLSX from 'xlsx'
+import { useSettings } from '@/hooks/useSettings'
+const QueryWordEditor = ({
+  title,
+  setIsWordOpen,
+  isWordOpen,
+  contentDocument
+}) => {
+  const [zoom, setZoom] = useState(100)
+  const [widthPage, setWidthPage] = useState('210')
+  const [heightPage, setHeightPage] = useState('297')
+  const [paddingTop, setPaddingTop] = useState('15')
+  const [paddingBottom, setPaddingBottom] = useState('15')
+  const [paddingLeft, setPaddingLeft] = useState('20')
+  const [paddingRight, setPaddingRight] = useState('20')
+  const [isSaving, setIsSaving] = useState(false)
   //   const [isExporting, setIsExporting] = useState(false);
-  const [savedContent, setSavedContent] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
-  const { settings } = useSettings();
+  const [savedContent, setSavedContent] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [statusMessage, setStatusMessage] = useState('')
+  const { settings } = useSettings()
 
   const editor = useEditor({
     extensions,
@@ -33,31 +38,31 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none w-full max-w-full",
-      },
-    },
-  });
+          'prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none w-full max-w-full'
+      }
+    }
+  })
   useEffect(() => {
     if (editor && title) {
-      editor.commands.setContent(content(title));
+      editor.commands.setContent(content(title))
     }
-  }, [editor, title]);
+  }, [editor, title])
   const page = {
     width: `${widthPage}mm`,
     minHeight: `${heightPage}mm`,
     // Height: "100%",
     padding: `${paddingTop}mm ${paddingRight}mm ${paddingBottom}mm ${paddingLeft}mm`,
-    margin: "0 auto",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    overflow: "hidden",
-    pageBreakAfter: "always",
-    display: "flex",
-    flexDirection: "column",
+    margin: '0 auto',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    overflow: 'hidden',
+    pageBreakAfter: 'always',
+    display: 'flex',
+    flexDirection: 'column'
     // backgroundColor: "white",
     // transform: `scale(${zoom / 100})`,
     // transformOrigin: "center center",
     // transition: "transform 0.3s ease",
-  };
+  }
 
   const valuePageLayout = {
     widthPage,
@@ -65,8 +70,8 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
     paddingTop,
     paddingBottom,
     paddingLeft,
-    paddingRight,
-  };
+    paddingRight
+  }
 
   const handleChangePageLayout = (type, value) => {
     const settings = {
@@ -77,35 +82,35 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
       paddingBottom: setPaddingBottom,
       paddingLeft: setPaddingLeft,
       resetValue: () => {
-        setWidthPage("240");
-        setHeightPage("297");
-        setPaddingTop("25.4");
-        setPaddingBottom("25.4");
-        setPaddingLeft("25.4");
-        setPaddingRight("25.4");
+        setWidthPage('240')
+        setHeightPage('297')
+        setPaddingTop('25.4')
+        setPaddingBottom('25.4')
+        setPaddingLeft('25.4')
+        setPaddingRight('25.4')
       },
       horizontal: () => {
-        setWidthPage(heightPage);
-        setHeightPage(widthPage);
+        setWidthPage(heightPage)
+        setHeightPage(widthPage)
       },
       vertical: () => {
-        setWidthPage(heightPage);
-        setHeightPage(widthPage);
-      },
-    };
+        setWidthPage(heightPage)
+        setHeightPage(widthPage)
+      }
+    }
 
     if (settings[type]) {
       if (
-        type !== "resetValue" &&
-        type !== "horizontal" &&
-        type !== "vertical"
+        type !== 'resetValue' &&
+        type !== 'horizontal' &&
+        type !== 'vertical'
       ) {
-        settings[type](value);
+        settings[type](value)
       } else {
-        settings[type]();
+        settings[type]()
       }
     }
-  };
+  }
 
   //   // ส่งออกเป็น PDF
   // const exportToPDF = async () => {
@@ -157,154 +162,154 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
   // };
 
   const saveAsJson = () => {
-    if (!editor) return;
-    setIsSaving(true);
+    if (!editor) return
+    setIsSaving(true)
     try {
-      const jsonData = JSON.stringify(editor.getJSON(), null, 2);
-      const blob = new Blob([jsonData], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${title || "document"}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
+      const jsonData = JSON.stringify(editor.getJSON(), null, 2)
+      const blob = new Blob([jsonData], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${title || 'document'}.json`
+      link.click()
+      URL.revokeObjectURL(url)
     } catch (error) {
-      console.error("Error saving JSON:", error);
-      alert("Failed to save JSON. Please try again.");
+      console.error('Error saving JSON:', error)
+      alert('Failed to save JSON. Please try again.')
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
   const saveContent = async () => {
-    if (!editor) return;
+    if (!editor) return
 
     try {
-      setIsSaving(true);
-      setStatusMessage("กำลังบันทึก...");
+      setIsSaving(true)
+      setStatusMessage('กำลังบันทึก...')
 
-      const jsonContent = editor.getJSON();
-      console.log("JSON Content to save:", jsonContent);
+      const jsonContent = editor.getJSON()
+      console.log('JSON Content to save:', jsonContent)
 
-      const response = await fetch("", {
-        method: "POST",
+      const response = await fetch('', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ content: jsonContent }),
-      });
+        body: JSON.stringify({ content: jsonContent })
+      })
 
       if (!response.ok) {
-        throw new Error("การบันทึกล้มเหลว");
+        throw new Error('การบันทึกล้มเหลว')
       }
 
-      const result = await response.json();
-      setSavedContent(jsonContent);
-      setStatusMessage("บันทึกสำเร็จ!");
+      const result = await response.json()
+      setSavedContent(jsonContent)
+      setStatusMessage('บันทึกสำเร็จ!')
 
-      setTimeout(() => setStatusMessage(""), 3000);
+      setTimeout(() => setStatusMessage(''), 3000)
     } catch (error) {
-      console.error("Error saving content:", error);
-      setStatusMessage("เกิดข้อผิดพลาดในการบันทึก");
+      console.error('Error saving content:', error)
+      setStatusMessage('เกิดข้อผิดพลาดในการบันทึก')
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
   const loadContent = async () => {
     try {
-      setIsLoading(true);
-      setStatusMessage("กำลังโหลด...");
+      setIsLoading(true)
+      setStatusMessage('กำลังโหลด...')
 
-      const response = await fetch("  ");
+      const response = await fetch('  ')
 
       if (!response.ok) {
-        throw new Error("การโหลดล้มเหลว");
+        throw new Error('การโหลดล้มเหลว')
       }
 
-      const data = await response.json();
-      console.log("Loaded JSON content:", data.content);
+      const data = await response.json()
+      console.log('Loaded JSON content:', data.content)
 
       if (editor && data.content) {
-        editor.commands.setContent(data.content);
-        setSavedContent(data.content);
-        setStatusMessage("โหลดเรียบร้อย!");
+        editor.commands.setContent(data.content)
+        setSavedContent(data.content)
+        setStatusMessage('โหลดเรียบร้อย!')
 
-        setTimeout(() => setStatusMessage(""), 3000);
+        setTimeout(() => setStatusMessage(''), 3000)
       }
     } catch (error) {
-      console.error("Error loading content:", error);
-      setStatusMessage("เกิดข้อผิดพลาดในการโหลด");
+      console.error('Error loading content:', error)
+      setStatusMessage('เกิดข้อผิดพลาดในการโหลด')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleFileUpload = event => {
+    const file = event.target.files[0]
+    if (!file) return
 
-    if (file.type !== "application/json" && !file.name.endsWith(".json")) {
-      setStatusMessage("กรุณาเลือกไฟล์ JSON เท่านั้น");
+    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+      setStatusMessage('กรุณาเลือกไฟล์ JSON เท่านั้น')
       addToast({
-        title: "กรุณาเลือกไฟล์ JSON เท่านั้น",
+        title: 'กรุณาเลือกไฟล์ JSON เท่านั้น',
         timeout: 3000,
         shouldShowTimeoutProgress: true,
-        color: "danger",
-      });
-      return;
+        color: 'danger'
+      })
+      return
     }
 
-    setIsLoading(true);
-    setStatusMessage("กำลังอ่านไฟล์...");
+    setIsLoading(true)
+    setStatusMessage('กำลังอ่านไฟล์...')
 
-    const reader = new FileReader();
+    const reader = new FileReader()
 
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
-        const content = JSON.parse(e.target.result);
+        const content = JSON.parse(e.target.result)
 
         if (editor) {
-          editor.commands.setContent(content);
-          setSavedContent(content);
-          setStatusMessage("นำเข้าไฟล์สำเร็จ!");
+          editor.commands.setContent(content)
+          setSavedContent(content)
+          setStatusMessage('นำเข้าไฟล์สำเร็จ!')
           addToast({
-            title: "นำเข้าไฟล์สำเร็จ!",
+            title: 'นำเข้าไฟล์สำเร็จ!',
             timeout: 3000,
             shouldShowTimeoutProgress: true,
-            color: "success",
-          });
+            color: 'success'
+          })
         }
       } catch (error) {
-        console.error("Error parsing JSON file:", error);
-        setStatusMessage("เกิดข้อผิดพลาดในการอ่านไฟล์ JSON");
+        console.error('Error parsing JSON file:', error)
+        setStatusMessage('เกิดข้อผิดพลาดในการอ่านไฟล์ JSON')
         addToast({
-          title: "เกิดข้อผิดพลาดในการอ่านไฟล์ JSON",
+          title: 'เกิดข้อผิดพลาดในการอ่านไฟล์ JSON',
           timeout: 3000,
           shouldShowTimeoutProgress: true,
-          color: "danger",
-        });
+          color: 'danger'
+        })
       } finally {
-        setIsLoading(false);
-        setTimeout(() => setStatusMessage(""), 3000);
+        setIsLoading(false)
+        setTimeout(() => setStatusMessage(''), 3000)
       }
-    };
+    }
 
     reader.onerror = () => {
-      console.error("Error reading file");
-      setStatusMessage("เกิดข้อผิดพลาดในการอ่านไฟล์");
+      console.error('Error reading file')
+      setStatusMessage('เกิดข้อผิดพลาดในการอ่านไฟล์')
       addToast({
-        title: "เกิดข้อผิดพลาดในการอ่านไฟล์",
+        title: 'เกิดข้อผิดพลาดในการอ่านไฟล์',
         timeout: 3000,
         shouldShowTimeoutProgress: true,
-        color: "danger",
-      });
-      setIsLoading(false);
-    };
+        color: 'danger'
+      })
+      setIsLoading(false)
+    }
 
-    reader.readAsText(file);
+    reader.readAsText(file)
 
-    event.target.value = "";
-  };
+    event.target.value = ''
+  }
 
   const pageStyle = `<style> 
   @page {
@@ -335,34 +340,34 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
     }
 }
 
-  </style>`;
+  </style>`
 
   useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = pageStyle;
-    document.head.appendChild(styleElement);
+    const styleElement = document.createElement('style')
+    styleElement.innerHTML = pageStyle
+    document.head.appendChild(styleElement)
 
     return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
+      document.head.removeChild(styleElement)
+    }
+  }, [pageStyle])
 
-  const buttonStyle = (isActive) => ({
+  const buttonStyle = isActive => ({
     borderRadius: 5,
     fontSize: 20,
     backgroundColor: isActive
-      ? settings.mode === "Dark"
-        ? "#444950"
-        : "#D3D3D3"
-      : "transparent",
-  });
+      ? settings.mode === 'Dark'
+        ? '#444950'
+        : '#D3D3D3'
+      : 'transparent'
+  })
 
   const groupStyle = {
     // backgroundColor: "#fff",
-    border: "2px solid rgb(192, 179, 179,0.4)",
+    border: '2px solid rgb(192, 179, 179,0.4)',
     borderRadius: 8,
-    padding: "3px 3px",
-  };
+    padding: '3px 3px'
+  }
   // const handleFileUploadXlsx = (event) => {
   //   const file = event.target.files[0];
   //   if (file) {
@@ -380,7 +385,7 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
   // };
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {/* {statusMessage && <div className="status-message">{statusMessage}</div>} */}
 
       {/* <input type="file" accept=".xlsx, .xls" onChange={handleFileUploadXlsx} /> */}
@@ -389,8 +394,8 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
         editor={editor}
         buttonStyle={buttonStyle}
         groupStyle={groupStyle}
-        justify="center"
-        align="center"
+        justify='center'
+        align='center'
         gap={5}
         undo={false}
         redo={false}
@@ -410,37 +415,37 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
           margin: 10,
           padding: 0,
 
-          height: "calc(90vh - 140px)",
-          overflowY: "auto",
-          overflowX: "auto",
-          backgroundColor: "transparent",
-          border: "none",
-          justifyContent: "center",
+          height: 'calc(90vh - 140px)',
+          overflowY: 'auto',
+          overflowX: 'auto',
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent: 'center'
         }}
       >
         <Card
-          className="bg-white dark:bg-zinc-900"
-          shadow="md"
-          id="page"
+          className='bg-white dark:bg-zinc-900'
+          shadow='md'
+          id='page'
           style={{
             ...page,
             zoom: `${zoom}%`,
-            border: "none",
+            border: 'none'
           }}
           styles={{
             body: {
-              overflow: "hidden",
+              overflow: 'hidden',
               borderRadius: 0,
               padding: 0,
-              margin: 0,
-            },
+              margin: 0
+            }
           }}
         >
           <EditorContent
             editor={editor}
             style={{
-              overflow: "hidden",
-              height: "inherit",
+              overflow: 'hidden',
+              height: 'inherit'
             }}
           />
         </Card>
@@ -448,14 +453,14 @@ const QueryWordEditor = ({ title, setIsWordOpen, isWordOpen }) => {
 
       <FooterBar
         editor={editor}
-        pageId={document.getElementById("page")}
+        pageId={document.getElementById('page')}
         zoom={zoom}
         setZoom={setZoom}
         undo={true}
         redo={true}
       />
     </div>
-  );
-};
+  )
+}
 
-export default QueryWordEditor;
+export default QueryWordEditor

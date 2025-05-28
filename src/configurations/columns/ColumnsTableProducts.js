@@ -29,12 +29,12 @@ const ColumnsTableProducts = [
     // width: "80px",
     type: 'text'
   },
-  // {
-  //   key: "tags",
-  //   label: "Tags",
-  //   // width: "250px",
-  //   type: "chip",
-  // },
+  {
+    key: 'tags',
+    label: 'Tags',
+    // width: "250px",
+    type: 'chip'
+  },
   {
     key: 'actions',
     label: 'ACTIONS',
