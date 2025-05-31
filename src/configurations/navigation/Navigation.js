@@ -43,8 +43,20 @@ const Navigation = [
         icon: <IoReceiptSharp className='text-lg' />
       }
     ]
-  }
+  },
   //   { title: "Customer", url: "/customer", icon: <FaUser /> },
+  {
+    title: 'Shipping',
+    url: '/shipping',
+    icon: <FaMapMarkedAlt className='text-lg' />,
+    children: [
+      {
+        title: 'JOB',
+        url: '/shipping/job',
+        icon: <AiFillFileText className='text-lg' />
+      }
+    ]
+  }
 ]
 
 export { Navigation }
