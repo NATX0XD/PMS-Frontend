@@ -5,14 +5,19 @@ const inputItemsImportShipment = [
   {
     key: 'job',
     type: 'input',
-    label: 'JOB NO',
+    label: 'JOB',
     placeholder: 'Enter job number',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
+    startContent: (
+      <div className='pointer-events-none flex items-center'>
+        <span className='text-default-400 text-small'>NO</span>
+      </div>
+    ),
     section: 'basic'
   },
   {
     key: 'shipment-type',
-    type: 'radioGroup',
+    type: 'autoComplete',
     label: 'Shipment Type',
     orientation: 'horizontal',
     optionValue: [
@@ -105,7 +110,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'MBL',
     placeholder: 'Master Bill of Lading',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'document'
   },
   {
@@ -113,7 +118,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'BL เปลี่ยน',
     placeholder: 'Bill of Lading Change',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'document'
   },
   {
@@ -121,75 +126,124 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'HBL',
     placeholder: 'House Bill of Lading',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
+    section: 'document'
+  },
+  {
+    key: 'con',
+    type: 'input',
+    label: 'CON',
+    placeholder: 'Container NO.',
+    labelPlacement: 'outside',
     section: 'document'
   },
   {
     key: 'carrier-agent',
     type: 'input',
     label: 'Carrier or Airline or Agent',
-    placeholder: 'Enter carrier/airline/agent',
-    labelPlacement: 'outside-left',
+    placeholder: 'Enter carrier/airline/agent   (AIR)',
+    labelPlacement: 'outside',
     section: 'document'
   },
   {
-    key: 'vsl-voy',
+    key: 'vsl',
     type: 'input',
-    label: 'VSL&VOY',
-    placeholder: 'Vessel & Voyage',
-    labelPlacement: 'outside-left',
+    label: 'VSL',
+    placeholder: 'Vessel',
+    labelPlacement: 'outside',
+    section: 'document'
+  },
+  {
+    key: 'voy',
+    type: 'input',
+    label: 'VOY',
+    placeholder: 'Voyage',
+    labelPlacement: 'outside',
     section: 'document'
   },
 
+  {
+    key: 'pod',
+    type: 'checkboxGroupWithInput',
+    label: 'POD',
+    optionValue: [
+      {
+        key: 'bkk',
+        value: 'bkk',
+        labelCheckbox: 'BKK',
+        labelInput: 'TERMINAL',
+        placeholder: null
+      },
+      {
+        key: 'lkb',
+        value: 'lkb',
+        labelCheckbox: 'LKB',
+        labelInput: 'SHED',
+        placeholder: null
+      },
+      {
+        key: 'lch',
+        value: 'lch',
+        labelCheckbox: 'LCH',
+        labelInput: 'เปิดตู้',
+        placeholder: null
+      },
+      {
+        key: 'other',
+        value: 'other',
+        labelCheckbox: 'Other',
+        labelInput: null,
+        placeholder: null
+      }
+    ],
+    section: 'terminal'
+  },
+
   // ท่าเรือและสถานที่
-  {
-    key: 'pod-terminal',
-    type: 'input',
-    label: 'POD BKK TERMINAL',
-    placeholder: 'Port of Discharge Bangkok Terminal',
-    labelPlacement: 'outside-left',
-    section: 'terminal'
-  },
-  {
-    key: 'lkb-shed',
-    type: 'input',
-    label: 'LKB SHED',
-    placeholder: 'LKB Shed',
-    labelPlacement: 'outside-left',
-    section: 'terminal'
-  },
-  {
-    key: 'lch',
-    type: 'input',
-    label: 'LCH',
-    placeholder: 'LCH',
-    labelPlacement: 'outside-left',
-    section: 'terminal'
-  },
-  {
-    key: 'container-opening',
-    type: 'input',
-    label: 'เปิดตู้',
-    placeholder: 'Container Opening',
-    labelPlacement: 'outside-left',
-    section: 'terminal'
-  },
+
   {
     key: 'enter-bl',
     type: 'input',
     label: 'ENTER BL',
     placeholder: 'Enter Bill of Lading',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'terminal'
   },
 
   // เวลาและวันที่
   {
     key: 'free-time',
-    type: 'input',
+    type: 'inputGroup',
     label: 'FREE TIME',
+    optionValue: [
+      {
+        key: 'dem',
+        startContent: (
+          <div className='pointer-events-none flex items-center'>
+            <span className='text-default-400 text-small'>DEM</span>
+          </div>
+        )
+      },
+      {
+        key: 'det',
+        startContent: (
+          <div className='pointer-events-none flex items-center'>
+            <span className='text-default-400 text-small'>DET</span>
+          </div>
+        )
+      },
+      {
+        key: 'elec',
+        startContent: (
+          <div className='pointer-events-none flex items-center'>
+            <span className='text-default-400 text-small'>ELEC</span>
+          </div>
+        )
+      }
+    ],
+
     placeholder: 'DEM DET ELEC',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'timing'
   },
   {
@@ -197,7 +251,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'ATD',
     placeholder: 'เริ่มนับวันที่ (Actual Time of Departure)',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'timing'
   },
   {
@@ -205,15 +259,23 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'ค่าใช้จ่ายแลก DO เบิกวันที่',
     placeholder: 'DO Exchange Cost Date',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'timing'
   },
   {
     key: 'do-exchange',
     type: 'input',
-    label: 'แลก DO',
+    label: 'รับ DO',
     placeholder: 'DO Exchange',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
+    section: 'timing'
+  },
+  {
+    key: 'do-exchange',
+    type: 'input',
+    label: 'จ่ายเงิน DO',
+    placeholder: 'DO Exchange',
+    labelPlacement: 'outside',
     section: 'timing'
   },
   {
@@ -221,7 +283,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'BKK LCH วันที่',
     placeholder: 'BKK LCH Date',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'timing'
   },
 
@@ -231,7 +293,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'INSURANCE',
     placeholder: 'Insurance details',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'financial'
   },
   {
@@ -239,7 +301,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'FRT INV',
     placeholder: 'Freight Invoice',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'financial'
   },
   {
@@ -247,7 +309,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'SHIPPING',
     placeholder: 'Shipping details',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'financial'
   },
 
@@ -257,7 +319,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'แพลนตรวจปล่อย',
     placeholder: 'Inspection Release Plan',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'operation'
   },
   {
@@ -265,7 +327,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'จองรถ แพลนรับสินค้าที่ท่า',
     placeholder: 'Truck Booking & Cargo Pickup Plan at Port',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'operation'
   },
   {
@@ -273,7 +335,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'ทะเบียนรถ / คนขับ / เบอร์โทร',
     placeholder: 'License Plate / Driver / Phone Number',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'operation'
   },
 
@@ -283,7 +345,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'CNEE',
     placeholder: 'Consignee',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'customer'
   },
   {
@@ -291,7 +353,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'ETA',
     placeholder: 'Estimated Time of Arrival',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'customer'
   },
   {
@@ -299,7 +361,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'INV/PO',
     placeholder: 'Invoice/Purchase Order',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'customer'
   },
   {
@@ -307,7 +369,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'นัดส่งของ / ส่ง DO วันที่',
     placeholder: 'Delivery Appointment / DO Sending Date',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'customer'
   },
 
@@ -317,7 +379,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'ลากตู้',
     placeholder: 'Container Dragging',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'container'
   },
   {
@@ -325,7 +387,7 @@ const inputItemsImportShipment = [
     type: 'input',
     label: 'CON',
     placeholder: 'Container Number',
-    labelPlacement: 'outside-left',
+    labelPlacement: 'outside',
     section: 'container'
   }
 ]
