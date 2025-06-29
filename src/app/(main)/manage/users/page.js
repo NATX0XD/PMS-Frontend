@@ -1,14 +1,14 @@
 'use client'
 import React, { Suspense } from 'react'
-import FormUsers from '@/views/users'
 import LoadingUsersPage from './loading'
 import { useSetPageTitle } from '@/helpers/useSetPageTitle'
+import ViewUsers from '@/views/manage/users'
 
 const Users = () => {
-  useSetPageTitle('Account Management')
+  useSetPageTitle('Users Management')
   return (
     <Suspense fallback={<LoadingUsersPage />}>
-      <FormUsers />
+      <ViewUsers />
     </Suspense>
   )
 }

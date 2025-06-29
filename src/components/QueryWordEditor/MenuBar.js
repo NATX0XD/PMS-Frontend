@@ -54,9 +54,6 @@ const MenuBar = ({
   setIsWordOpen,
   isWordOpen
 }) => {
-  if (!editor) {
-    return null
-  }
   const { handleChangePageLayout, valuePageLayout } = pageLayoutFunction
   const [openFontColor, setOpenFontColor] = useState(false)
   const [openTableColor, setOpenTableColor] = useState(false)
@@ -242,7 +239,9 @@ const MenuBar = ({
       reader.readAsText(file)
     }
   }
-
+  if (!editor) {
+    return null
+  }
   return (
     <>
       {/* // <Card className="w-full p-2 rounded-xl shadow-sm"> */}

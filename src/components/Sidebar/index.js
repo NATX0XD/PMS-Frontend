@@ -69,12 +69,16 @@ const Sidebar = ({ isMobile }) => {
 
       <nav className='px-2 py-4 space-y-3'>
         {Navigation.map(item => {
-          const isActive = pathname === item.url
+          // const isActive = pathname === item.url
+          const isActive =
+            pathname === item.url ||
+            (item.children &&
+              item.children.some(child => pathname === child.url))
+
           return (
             <div key={item.title}>
               <Button
-                as={Link}
-                href={item.url}
+                {...(item.url ? { as: Link, href: item.url } : {})}
                 onPress={() => {
                   if (item.children) toggleSubMenu(item.title)
                 }}
@@ -82,7 +86,7 @@ const Sidebar = ({ isMobile }) => {
                 size={isCollapsed ? 'sm' : 'md'}
                 variant={isActive ? 'solid' : 'light'}
                 className={clsx(
-                  'justify-start gap-3 px-3 py-2 text-left transition-colors ',
+                  'justify-start gap-3 px-3 py-2 text-left transition-colors',
                   isCollapsed && 'justify-center',
                   isActive &&
                     'bg-gradient-to-r from-[var(--primaryGradientStart)] via-[var(--primaryGradientMiddle)] to-[var(--primaryGradientEnd)] text-white'

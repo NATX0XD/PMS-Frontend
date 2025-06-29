@@ -3,8 +3,8 @@ import TableQuery from '@/components/TableQuery'
 import ColumnsTableUsers from '@/configurations/columns/ColumnsTableUsers'
 import { useAsyncList } from '@react-stately/data'
 import React, { useEffect, useState } from 'react'
-import InputItemsAccounts from '@/configurations/InputItemsAccounts'
-const FormUsers = () => {
+import InputItemsAccounts from '@/configurations/modalCreate/InputItemsAccounts'
+const ViewUsers = () => {
   // let listUsers = useAsyncList({
   //   async load ({ signal }) {
   //     let res = await fetch('https://dummyjson.com/users', {
@@ -69,4 +69,5 @@ const FormUsers = () => {
   )
 }
 
-export default FormUsers
+export default ViewUsers
+//
