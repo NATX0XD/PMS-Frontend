@@ -6,10 +6,10 @@ import { useAsyncList } from '@react-stately/data'
 import React, { useEffect, useState } from 'react'
 import { productController } from '@/api/controllers/products'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import InputItemsProducts from '@/configurations/InputItemsProducts'
+import InputItemsProducts from '@/configurations/modalCreate/InputItemsProducts'
 import { usePageTitle } from '@/context/PageTitleContext'
 
-const FormProducts = props => {
+const ViewProducts = props => {
   const queryClient = useQueryClient()
 
   // //findAll
@@ -133,14 +133,14 @@ const FormProducts = props => {
           'price',
           'stock'
         ]}
-        // queryFunction={() => productData || { data: [] }}
-        // isLoading={isFetchingProducts}
-        // updateFunction={productController(props).update}
-        // deleteFunction={productController(props).delete}
-        // height="200px"
+      // queryFunction={() => productData || { data: [] }}
+      // isLoading={isFetchingProducts}
+      // updateFunction={productController(props).update}
+      // deleteFunction={productController(props).delete}
+      // height="200px"
       />
     </>
   )
 }
 
-export default FormProducts
+export default ViewProducts

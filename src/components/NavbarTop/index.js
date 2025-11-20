@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   Button,
   Dropdown,
@@ -6,7 +6,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Input,
-  Avatar
+  Avatar,
+  Card
 } from '@heroui/react'
 import { IoIosSearch, IoMdMenu, IoMdSettings, IoMdSunny } from 'react-icons/io'
 import { FaBell, FaMoon } from 'react-icons/fa'
@@ -14,6 +15,7 @@ import { useSettings } from '@/hooks/useSettings'
 import { signOut } from 'next-auth/react'
 import { useAuth } from '@/hooks/useAuth'
 import { MdLanguage } from 'react-icons/md'
+import { IoSparkles } from 'react-icons/io5'
 
 const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
   const { settings, saveSettings } = useSettings()
@@ -69,17 +71,40 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
       value: 'Desert'
     }
   ]
-  console.log(settings)
+
   const handleSignOut = () => {
     signOut({ redirect: true, callbackUrl: '/sign-in' })
   }
 
+  const currentDate = useMemo(() => {
+    return new Date().toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    })
+  }, [])
+
+  const currentTime = useMemo(() => {
+    return new Date().toLocaleTimeString('th-TH', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }, [])
+
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'สวัสดีตอนเช้า'
+    if (hour < 17) return 'สวัสดีตอนบ่าย'
+    return 'สวัสดีตอนเย็น'
+  }
+
   return (
-    <div className='flex justify-between items-center p-3 pb-2 space-x-2 '>
-      <div className='flex items-center space-x-2'>
+    <div className='flex justify-between items-center p-4  space-x-4  '>
+      <div className='flex items-center space-x-4'>
         {isMobile && (
           <Button
-            className='bg-white dark:bg-zinc-700'
+            className='bg-white dark:bg-zinc-700 shadow-sm hover:shadow-md transition-shadow'
             isIconOnly
             radius='full'
             aria-label='Open Sidebar'
@@ -89,32 +114,38 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
             <IoMdMenu className='text-lg' />
           </Button>
         )}
-        <div className='hidden sm:block md:block lg:block xl:block xxl:block'>
-          {/* <Input
-            placeholder='Type to search...'
-            radius='full'
-            variants='bordered'
-            startContent={<IoIosSearch />}
-            isClearable
-            classNames={{
-              label: 'text-black/50 dark:text-white/90',
-              input: [
-                'bg-white',
-                'text-black/90 dark:text-white/90',
-                'placeholder:text-default-700/50 dark:placeholder:text-white/60'
-              ],
-              inputWrapper: [
-                'bg-white',
-                'hover:bg-white',
-                'group-data-[focus=true]:bg-white',
-                'dark:bg-zinc-700',
-                'dark:hover:bg-zinc-700',
-                'dark:group-data-[focus=true]:bg-zinc-700',
-                '!cursor-text'
-              ]
-            }}
-          /> */}
-          <h1 className='text-xl  '>{titlePage}</h1>
+
+        <div className='hidden md:block'>
+          <div className='flex items-center space-x-4'>
+            {/* Page Title Section */}
+            <div className='flex items-center space-x-2'>
+              <div className='w-1 h-6 bg-gradient-to-b from-[var(--primaryGradientStart)] to-[var(--primaryGradientEnd)] rounded-full'></div>
+              <h1 className='text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent'>
+                {titlePage}
+              </h1>
+            </div>
+
+            {/* Divider */}
+            <div className='w-px h-6 bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-600'></div>
+
+            {/* Greeting Section */}
+            <div className='flex items-center space-x-2'>
+              <div className='flex items-center space-x-1.5 mt-0.5'>
+                <span className='text-xs text-gray-600 dark:text-gray-400 font-medium'>
+                  {currentDate}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='block md:hidden'>
+          <div className='flex items-center space-x-2'>
+            <div className='w-1 h-6 bg-gradient-to-b from-[var(--primaryGradientStart)] to-[var(--primaryGradientEnd)] rounded-full'></div>
+            <h1 className='text-lg font-bold text-gray-900 dark:text-white'>
+              {titlePage}
+            </h1>
+          </div>
         </div>
       </div>
 
@@ -123,7 +154,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
         <Dropdown placement='bottom-end' className='min-w-[120px]' shadow='sm'>
           <DropdownTrigger>
             <Button
-              className='bg-white dark:bg-zinc-700'
+              className='bg-white dark:bg-zinc-700 shadow-sm hover:shadow-md transition-all duration-200'
               isIconOnly
               radius='full'
               aria-label='Theme Mode'
@@ -158,7 +189,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
         <Dropdown placement='bottom-end' className='min-w-[140px]' shadow='sm'>
           <DropdownTrigger>
             <Button
-              className='bg-white dark:bg-zinc-700'
+              className='bg-white dark:bg-zinc-700 shadow-sm hover:shadow-md transition-all duration-200'
               isIconOnly
               radius='full'
               aria-label='Color Theme'
@@ -194,7 +225,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
         <Dropdown placement='bottom-end' className='min-w-[100px]' shadow='sm'>
           <DropdownTrigger>
             <Button
-              className='bg-white dark:bg-zinc-700'
+              className='bg-white dark:bg-zinc-700 shadow-sm hover:shadow-md transition-all duration-200'
               isIconOnly
               radius='full'
               aria-label='Language'
@@ -223,7 +254,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
 
         {/* Notifications */}
         <Button
-          className='bg-white dark:bg-zinc-700'
+          className='bg-white dark:bg-zinc-700 shadow-sm hover:shadow-md transition-all duration-200'
           isIconOnly
           radius='full'
           aria-label='Notifications'
@@ -238,7 +269,7 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
             <Avatar
               color='primary'
               as='button'
-              className='transition-transform'
+              className='transition-transform hover:scale-105 shadow-lg'
               name={profile?.username?.charAt(0).toUpperCase()}
               size='md'
               showFallback
@@ -249,7 +280,6 @@ const NavbarTop = ({ isMobile, onOpenSidebar, titlePage }) => {
             <DropdownItem key='profile' className='gap-2'>
               <div>
                 <p className='font-semibold'>
-                  {' '}
                   {profile?.username?.charAt(0).toUpperCase() +
                     profile?.username.slice(1)}
                 </p>

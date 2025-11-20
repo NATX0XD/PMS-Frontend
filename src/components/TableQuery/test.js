@@ -391,7 +391,7 @@ export default function App () {
     }
 
     return filteredUsers
-  }, [users, filterValue, statusFilter])
+  }, [hasSearchFilter, statusFilter, filterValue])
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1
 
@@ -586,12 +586,11 @@ export default function App () {
     )
   }, [
     filterValue,
+    onSearchChange,
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
-    onSearchChange,
-    hasSearchFilter
+    onClear
   ])
 
   const bottomContent = React.useMemo(() => {
@@ -631,7 +630,14 @@ export default function App () {
         </div>
       </div>
     )
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter])
+  }, [
+    selectedKeys,
+    filteredItems.length,
+    page,
+    pages,
+    onPreviousPage,
+    onNextPage
+  ])
 
   return (
     <Table

@@ -14,7 +14,6 @@ import {
   Textarea
 } from '@heroui/react'
 import { FaBoxes, FaImage } from 'react-icons/fa'
-import { productController } from '@/api/controllers/products'
 import { EyeIcon } from '../icon/EyeIcon'
 import { EyeSlashIcon } from '../icon/EyeSlashIcon'
 
@@ -25,7 +24,7 @@ const TableModalAction = ({
   ModalTitle = 'Title Action',
   actionFunction = null
 }) => {
-  const { create } = productController()
+
   const fileInputRef = useRef(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -109,19 +108,16 @@ const TableModalAction = ({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`mb-2 flex justify-center items-center cursor-pointer transition-colors duration-150 ${
-              isProfile
-                ? `h-40 w-40 rounded-full border-2 border-dashed ${
-                    isDragging
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700'
-                  }`
-                : `h-40 rounded-xl border-2 border-dashed flex-col gap-2 w-full ${
-                    isDragging
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700'
-                  }`
-            }`}
+            className={`mb-2 flex justify-center items-center cursor-pointer transition-colors duration-150 ${isProfile
+              ? `h-40 w-40 rounded-full border-2 border-dashed ${isDragging
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700'
+              }`
+              : `h-40 rounded-xl border-2 border-dashed flex-col gap-2 w-full ${isDragging
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700'
+              }`
+              }`}
           >
             {imagePreview ? (
               <Image
@@ -129,9 +125,8 @@ const TableModalAction = ({
                 src={imagePreview}
                 width={isProfile ? 160 : 240}
                 height={isProfile ? 160 : undefined}
-                className={`object-cover ${
-                  isProfile ? 'rounded-full' : 'rounded-md max-h-36'
-                }`}
+                className={`object-cover ${isProfile ? 'rounded-full' : 'rounded-md max-h-36'
+                  }`}
               />
             ) : (
               <div className='flex flex-col items-center'>

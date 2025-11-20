@@ -28,6 +28,12 @@ const inputItemsExportShipment = [
         value: 'fcl',
         label: 'FCL',
         description: 'Full Container Load'
+      },
+      {
+        key: 'truck',
+        value: 'truck',
+        label: 'Truck',
+        description: 'Truck Container Load'
       }
     ],
     section: 'basic'

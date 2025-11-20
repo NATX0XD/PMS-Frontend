@@ -1,44 +1,56 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { ArrowUpRight } from "@/components/icon/Arrow/ArrowUpRight";
-import { Button, Card, Chip, cn } from "@heroui/react";
-import { FaUsers } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+'use client'
+import React, { useEffect, useState } from 'react'
+import { ArrowUpRight } from '@/components/icon/Arrow/ArrowUpRight'
+import { Button, Card, Chip, cn } from '@heroui/react'
+import { FaUsers } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import SummaryCard from '@/components/SummaryCard'
 
 const SummaryUsers = () => {
-  const router = useRouter();
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [percentChange, setPercentChange] = useState(0);
+  const router = useRouter()
+  const [totalUsers, setTotalUsers] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [percentChange, setPercentChange] = useState(0)
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setIsLoading(true);
-        const response = await fetch("https://dummyjson.com/users");
+        setIsLoading(true)
+        const response = await fetch('https://dummyjson.com/users')
 
         if (!response.ok) {
-          throw new Error("การดึงข้อมูลล้มเหลว");
+          throw new Error('การดึงข้อมูลล้มเหลว')
         }
 
-        const data = await response.json();
+        const data = await response.json()
 
         if (data && data.users && Array.isArray(data.users)) {
-          setTotalUsers(data.users.length);
+          setTotalUsers(data.users.length)
 
-          setPercentChange("N/A");
+          setPercentChange('N/A')
         }
       } catch (error) {
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:", error);
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
   return (
-    <Card
+    <>
+      <SummaryCard
+        title='รายได้รวมทั้งหมด'
+        description={null}
+        color='green'
+        value={230000}
+        previousValue={100000}
+        typeValue='currency'
+        // icon={}
+      />
+
+      {/* <Card
       key={"UsersAccounts"}
       className="border border-transparent dark:border-default-100"
     >
@@ -86,8 +98,9 @@ const SummaryUsers = () => {
           เพิ่มเติม
         </Button>
       </div>
-    </Card>
-  );
-};
+    </Card> */}
+    </>
+  )
+}
 
-export default SummaryUsers;
+export default SummaryUsers

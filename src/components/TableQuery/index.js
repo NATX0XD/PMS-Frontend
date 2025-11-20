@@ -25,7 +25,7 @@ import {
   Input
 } from '@heroui/react'
 import React, { useCallback, useMemo, useState } from 'react'
-import { FaChevronDown, FaPlus, FaTrash } from 'react-icons/fa'
+import { FaChevronDown, FaPlus, FaTrash, FaSync } from 'react-icons/fa'
 import { IoEllipsisVertical } from 'react-icons/io5'
 import { EyeIcon } from '../icon/EyeIcon'
 import { DeleteIcon } from '../icon/DeleteIcon'
@@ -34,7 +34,7 @@ import ConfirmModal from '../ConfirmModal'
 import TableModalAction from '../TableModalAction'
 import { IoIosSearch } from 'react-icons/io'
 
-export function capitalize (s) {
+export function capitalize(s) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : ''
 }
 
@@ -63,7 +63,8 @@ const TableQuery = ({
   renderTopContent = null,
   renderBottomContent = null,
   statusColorMap = null,
-  statusMapKey = null
+  statusMapKey = null,
+  refreshButton = false
 }) => {
   const [selectedItemToDelete, setSelectedItemToDelete] = useState(null)
   const {
@@ -291,6 +292,20 @@ const TableQuery = ({
             />
           ) : null}
           <div className='flex gap-3'>
+            {refreshButton && (
+              <Button
+                isIconOnly
+                variant='flat'
+                onPress={() => {
+                  if (typeof queryFunction === 'function') {
+                    queryFunction()
+                  }
+                }}
+                isDisabled={isLoading}
+              >
+                <FaSync className={isLoading ? 'animate-spin' : ''} />
+              </Button>
+            )}
             {columnsFilter ? (
               <Dropdown>
                 <DropdownTrigger className='hidden sm:flex'>
@@ -316,6 +331,8 @@ const TableQuery = ({
                 </DropdownMenu>
               </Dropdown>
             ) : null}
+
+
             {actionButton ? (
               <Button
                 color='primary'
@@ -329,7 +346,7 @@ const TableQuery = ({
               renderActionButton
             )}
           </div>
-        </div>
+        </div >
         <div className='flex justify-between items-center'>
           <span className='text-default-400 text-small'>
             Total {dataAll.length}
@@ -347,7 +364,7 @@ const TableQuery = ({
             </select>
           </label>
         </div>
-      </div>
+      </div >
     ) : (
       renderTopContent
     )
@@ -486,8 +503,8 @@ const TableQuery = ({
                 <TableColumn
                   key={column.key}
                   minWidth={column.width || '20px'}
-                  // style={column.width ? { width: column.width } : {}}
-                  // allowsSorting
+                // style={column.width ? { width: column.width } : {}}
+                // allowsSorting
                 >
                   {column.label}
                 </TableColumn>
