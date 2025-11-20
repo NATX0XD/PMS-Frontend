@@ -133,11 +133,11 @@ const ViewProducts = props => {
           'price',
           'stock'
         ]}
-        // queryFunction={() => productData || { data: [] }}
-        // isLoading={isFetchingProducts}
-        // updateFunction={productController(props).update}
-        // deleteFunction={productController(props).delete}
-        // height="200px"
+      // queryFunction={() => productData || { data: [] }}
+      // isLoading={isFetchingProducts}
+      // updateFunction={productController(props).update}
+      // deleteFunction={productController(props).delete}
+      // height="200px"
       />
     </>
   )

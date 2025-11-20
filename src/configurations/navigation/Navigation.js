@@ -50,6 +50,12 @@ const Navigation = [
     icon: <FaMapMarkedAlt className='text-lg' />
   },
   {
+    title: 'Jobs',
+    url: '/jobs',
+    icon: <AiFillFileText />,
+    perm: 'job.view'
+  },
+  {
     title: 'ออกเอกสาร',
     url: '/documents',
     icon: <AiFillFileText />,
